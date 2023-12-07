@@ -4,7 +4,7 @@ import GuestHomePageImages from "./GuestHomePageImages";
 
 export default function HeroSection() {
   return (
-    <CustomStyledHeroSection>
+    <CustomStyledHeroSectionOfGuestPage>
       <Box>
         <Typography variant="h4">
           Laughter. Tears. Thrills. Find it all on MovieDB.
@@ -13,11 +13,11 @@ export default function HeroSection() {
           Endless entertainment starts at just 80,000 VND. Cancel anytime.
         </Typography>
       </Box>
-    </CustomStyledHeroSection>
+    </CustomStyledHeroSectionOfGuestPage>
   );
 }
 
-const CustomStyledHeroSection = styled(Box)(({ theme }) => ({
+const CustomStyledHeroSectionOfGuestPage = styled(Box)(({ theme }) => ({
   height: "80vh",
   width: "100%",
   backgroundImage: `url(${GuestHomePageImages.heroSection.pathImage})`,
@@ -28,9 +28,7 @@ const CustomStyledHeroSection = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  "& .MuiBox-root": {
-    padding: "62px 48px",
-  },
+  padding: "62px 48px",
   "& .MuiTypography-root": {
     textAlign: "center",
     color: theme.palette.secondary.main,

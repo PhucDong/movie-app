@@ -1,7 +1,7 @@
-import heroSectionBgImage from "../../assets/images/hero-section_bgImage.jpg";
-import downloadSectionBgImage from "../../assets/images/download-section_bgImage.jpg";
-import platformSectionBgImage from "../../assets/images/platform-section_bgImage.jpg";
-import watchEverywhereSectionBgImage from "../../assets/images/watch-everywhere-section_bgImage.jpg";
+import heroSectionBgImage from "../../assets/images/GuestHomePage/hero-section_bgImage.jpg";
+import downloadSectionBgImage from "../../assets/images/GuestHomePage/download-section_bgImage.jpg";
+import platformSectionBgImage from "../../assets/images/GuestHomePage/platform-section_bgImage.jpg";
+import watchEverywhereSectionBgImage from "../../assets/images/GuestHomePage/watch-everywhere-section_bgImage.jpg";
 
 const GuestHomePageImages = {
   heroSection: {
