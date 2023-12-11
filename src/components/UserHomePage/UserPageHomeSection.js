@@ -3,13 +3,33 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import styled from "@emotion/styled";
 import UserHomePageImages from "./UserHomePageImages";
 
-export default function UserPageHomeSection() {
+export default function UserPageHomeSection({ heroSectionData }) {
+  function formattedDate() {
+    let options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(heroSectionData.releaseDate).toLocaleDateString(
+      [],
+      options
+    );
+  }
+
+  function formattedGenres() {
+    let newGenres = [];
+    heroSectionData.genres.forEach((genre) => {
+      newGenres.push(genre.name);
+    });
+    return newGenres.slice(0).join(", ");
+  }
+
   return (
-    <CustomStyledHeroSectionOfUserPage>
+    <CustomStyledHeroSectionOfUserPage bgImage={heroSectionData.bgImage}>
       <Box>
-        <Typography variant="h4">Movie Name</Typography>
-        <Typography className="movie-release-date">22 Oct 2021</Typography>
-        <Typography className="movie-genres">Genres: Sci-Fi, Action</Typography>
+        <Typography variant="h4">{heroSectionData.title}</Typography>
+        <Typography className="movie-release-date">
+          {formattedDate()}
+        </Typography>
+        <Typography className="movie-genres">
+          Genres: {formattedGenres()}
+        </Typography>
 
         <Box className="play-add-buttons">
           <Button className="play-btn">
@@ -23,19 +43,19 @@ export default function UserPageHomeSection() {
         </Box>
 
         <Typography className="movie-description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam, sunt
-          quisquam, dolores hic quasi ex debitis animi sequi neque accusamus
-          laboriosam, voluptas eligendi vitae officiis nemo eum qui dignissimos
-          mollitia?
+          {heroSectionData.description}
         </Typography>
       </Box>
     </CustomStyledHeroSectionOfUserPage>
   );
 }
 
-const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
+const CustomStyledHeroSectionOfUserPage = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "bgImage",
+})(({ theme, bgImage }) => ({
   height: "90vh",
   width: "100%",
+  // backgroundImage: bgImage ? `url(${bgImage})` : "",
   backgroundImage: `url(${UserHomePageImages.heroSection.pathImage})`,
   filter: "brightness(94%)",
   backgroundPosition: "center",
