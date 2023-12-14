@@ -59,12 +59,23 @@ const CustomStyledMovieCategorySection = styled(Box, {
   "& .MuiTab-root": {
     padding: 0,
     height: "100%",
-    width: "200px",
     borderRadius: "12px",
   },
   "& .MuiTabs-flexContainer": {
     display: "flex",
     alignItems: "center",
     gap: "8px",
+  },
+  [theme.breakpoints.up("sm")]: {
+    padding: "34px 27px 20px 27px",
+    "& h4": {
+      fontSize: "20px",
+    },
+  },
+  [theme.breakpoints.up("md")]: {
+    padding: "44px 87px 28px 87px",
+  },
+  [theme.breakpoints.up("lg")]: {
+    padding: "50px 87px 32px 87px",
   },
 }));
