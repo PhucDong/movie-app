@@ -2,8 +2,9 @@ import { Box, Button, Typography } from "@mui/material";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import styled from "@emotion/styled";
 import { BG_IMAGE_URL } from "../../app/config";
+import kDramasBgImage from "../../assets/images/UserHomePage/k-dramas_bgImage.jpg";
 
-export default function UserPageHomeSection({ heroSectionData }) {
+export default function UserPageHeroSection({ heroSectionData }) {
   function formattedDate() {
     let options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(heroSectionData.releaseDate).toLocaleDateString(
@@ -21,20 +22,26 @@ export default function UserPageHomeSection({ heroSectionData }) {
   }
 
   return (
-    <CustomStyledHeroSectionOfUserPage bgImage={heroSectionData.bgImage}>
+    // <CustomStyledHeroSectionOfUserPage bgImage={heroSectionData.bgImage}>
+    <CustomStyledHeroSectionOfUserPage>
       <img
-        src={`${BG_IMAGE_URL}${heroSectionData.bgImage}`}
-        alt={heroSectionData.title}
+        // src={`${BG_IMAGE_URL}${heroSectionData.bgImage}`}
+        // alt={heroSectionData.title}
+        src={kDramasBgImage}
+        alt="Bla bla bla"
       />
       <Box className="hero-section_container">
         <Box className="hero-section_content">
           <Box className="hero-section_main-text">
-            <Typography variant="h4">{heroSectionData.title}</Typography>
+            {/* <Typography variant="h4">{heroSectionData.title}</Typography> */}
+            <Typography variant="h4">Hello World</Typography>
             <Typography className="movie-release-date">
-              {formattedDate()}
+              {/* {formattedDate()} */}
+              22 Oct 2021
             </Typography>
             <Typography className="movie-genres">
-              Genres: {formattedGenres()}
+              {/* Genres: {formattedGenres()} */}
+              Genres: Sci-Fi, Action
             </Typography>
           </Box>
 
@@ -51,7 +58,10 @@ export default function UserPageHomeSection({ heroSectionData }) {
             </Box>
 
             <Typography className="movie-description">
-              {heroSectionData.description}
+              {/* {heroSectionData.description} */}
+              With his days numbered, high schooler Yuji decides to hunt down
+              and consume the remaining 19 fingers of a deadly curse so it can
+              die with him.
             </Typography>
           </Box>
         </Box>
@@ -60,9 +70,7 @@ export default function UserPageHomeSection({ heroSectionData }) {
   );
 }
 
-const CustomStyledHeroSectionOfUserPage = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "bgImage",
-})(({ theme }) => ({
+const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
   position: "relative",
   height: "90vh",
   width: "100%",

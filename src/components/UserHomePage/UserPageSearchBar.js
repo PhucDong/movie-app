@@ -1,12 +1,23 @@
 import { Box, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import styled from "@emotion/styled";
+import { useState } from "react";
 
-export default function UserPageSearchBar() {
+export default function UserPageSearchBar({ handleKeyDown }) {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChange = (e) => {
+    localStorage.setItem("searchValue", e.target.value);
+    setInputValue(e.target.value);
+  };
+
   return (
     <CustomStyledSearchBarOfUserPage>
       <TextField
         placeholder="Search for movies"
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

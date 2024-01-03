@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
-import UserPageHomeSection from "../components/UserHomePage/UserPageHomeSection";
+import UserPageHeroSection from "../components/UserHomePage/UserPageHeroSection";
 import UserPageSearchBar from "../components/UserHomePage/UserPageSearchBar";
 import UserPageMovieCategory from "../components/UserHomePage/UserPageMovieCategory";
 import { useEffect, useState } from "react";
 import apiService from "../app/apiService";
 import { API_KEY } from "../app/config";
+import { useNavigate } from "react-router-dom";
 
 export default function UserHomePage() {
   const [heroSectionData, setHeroSectionData] = useState({
@@ -22,7 +23,17 @@ export default function UserHomePage() {
   const [animationMoviesData, setAnimationMoviesData] = useState([]);
   const [comedyMoviesData, setComedyMoviesData] = useState([]);
 
-  const MovieCategoryData = [
+  const navigate = useNavigate();
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      localStorage.setItem("searchValue", e.target.value);
+      navigate("/search");
+    }
+  };
+
+  const movieCategoryData = [
     {
       heading: "Top Movies",
       headingTextColor: "secondary",
@@ -81,7 +92,7 @@ export default function UserHomePage() {
         console.log(error);
       }
     };
-
+    console.log(95, "Re-render hero section data");
     fetchedHeroSectionData();
   }, []);
 
@@ -181,9 +192,9 @@ export default function UserHomePage() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <UserPageHomeSection heroSectionData={heroSectionData} />
-      <UserPageSearchBar />
-      {MovieCategoryData.map((movieCategory, index) => (
+      <UserPageHeroSection heroSectionData={heroSectionData} />
+      <UserPageSearchBar handleKeyDown={handleKeyDown} />
+      {movieCategoryData.map((movieCategory, index) => (
         <UserPageMovieCategory key={index} movieCategory={movieCategory} />
       ))}
     </Box>

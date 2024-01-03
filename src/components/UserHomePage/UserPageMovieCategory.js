@@ -2,6 +2,7 @@ import { Box, Card, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import MovieCard from "./MovieCard";
 import styled from "@emotion/styled";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
 export default function UserPageMovieCategory({ movieCategory }) {
   const [value, setValue] = useState(0);
@@ -15,7 +16,10 @@ export default function UserPageMovieCategory({ movieCategory }) {
       headingTextColor={movieCategory.headingTextColor}
       bgColor={movieCategory.bgColor}
     >
-      <Typography variant="h4">{movieCategory.heading}</Typography>
+      <Box className="movie-category_heading-section">
+        <Typography variant="h4">{movieCategory.heading}</Typography>
+        <ArrowForwardIosRoundedIcon />
+      </Box>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -44,13 +48,23 @@ const CustomStyledMovieCategorySection = styled(Box, {
     bgColor === "primary"
       ? theme.palette.primary.main
       : theme.palette.secondary.main,
+  "& .movie-category_heading-section": {
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+    marginBottom: "10px",
+    "& svg": {
+      color: theme.palette.secondary.main,
+      width: "22px",
+      height: "20px",
+    },
+  },
   "& .MuiTabs-indicator": {
     display: "none",
   },
   "& h4": {
     fontSize: "18px",
     fontWeight: 700,
-    marginBottom: "10px",
     color:
       headingTextColor === "secondary"
         ? theme.palette.secondary.main
