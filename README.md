@@ -23,8 +23,9 @@ Add useContext to get login data
 ## Future features
 - Log out: to remove login data in local storage
 - User Home Page: generate random content for the hero section
+- Detailed TV Show Info Page: 
 
 ## Next steps
-- Design page Can't find search results (done)
-- Code that page (done)
-- Code static Detailed Info Page
+- After logging in, can't return to Guest Home Page
+- Adding log out feature
+- After clicking on a TV show genre, display shows of that genre with distinct categories
