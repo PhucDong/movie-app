@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 
 export default function DetailedInfoPage() {
   let tVShowDetailsLocalData = JSON.parse(
-    JSON.parse(localStorage.getItem("tvShowDetails"))
+    localStorage.getItem("tvShowDetails")
   );
-  console.log(14, tVShowDetailsLocalData);
+  console.log(13, tVShowDetailsLocalData);
 
   return (
     <>
