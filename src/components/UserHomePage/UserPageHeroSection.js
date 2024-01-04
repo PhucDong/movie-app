@@ -12,7 +12,7 @@ export default function UserPageHeroSection({ heroSectionData }) {
     );
   }
 
-  console.log(15, heroSectionData.genres);
+  // console.log(15, heroSectionData.genres);
 
   function formattedGenres() {
     let newGenres = [];
@@ -81,7 +81,7 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-end",
-    padding: "0 33px 20px 33px",
+    padding: "0 27px 20px 27px",
     textAlign: "center",
     background:
       "linear-gradient(rgba(42,159,255,.2) 0%, rgba(33,33,32,1) 95%, rgba(33,33,32,1) 95%)",
@@ -155,6 +155,7 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
     "& .hero-section_container": {
       padding: "0 87px 30px 87px",
+      justifyContent: "flex-start",
     },
     "& .hero-section_main-text": {
       textAlign: "left",
