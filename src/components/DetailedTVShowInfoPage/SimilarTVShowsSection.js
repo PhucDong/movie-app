@@ -8,31 +8,90 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import fakeSimilarTVShowsData from "../fakeData/fakeSimilarTVShowsData";
+import { useEffect, useState } from "react";
+import apiService from "../../app/apiService";
+import { API_KEY, BG_IMAGE_URL } from "../../app/config";
+import { useNavigate } from "react-router-dom";
 
-export default function SimilarTVShowsSection() {
+export default function SimilarTVShowsSection({ similarTVShowsData }) {
+  const [similarTVShows, setSimilarTVShows] = useState([]);
+  const navigate = useNavigate();
+
+  function formattedDate(dateData) {
+    let options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateData).toLocaleDateString([], options);
+  }
+
+  const handleSaveSimilarTVShowDetails = async (similarTVShowId) => {
+    try {
+      await apiService
+        .get(
+          `/3/tv/${similarTVShowId}?api_key=${API_KEY}&append_to_response=credits`
+        )
+        .then((response) =>
+          localStorage.setItem("tVShowDetails", JSON.stringify(response.data))
+        );
+    } catch (error) {
+      console.log(error);
+    }
+
+    window.location.reload(true);
+    navigate(`/user/${similarTVShowId}`);
+  };
+
+  useEffect(() => {
+    const fetchedSimilarTVShows = async () => {
+      try {
+        await apiService
+          .get(
+            `3/tv/${similarTVShowsData.id}/similar?api_key=${API_KEY}&page=1`
+          )
+          .then((response) => setSimilarTVShows([...response.data.results]));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchedSimilarTVShows();
+  });
+
   return (
     <CustomStyledSimilarTVShowsSection>
       <CustomStyledSimilarTVShowsContent>
         <Typography variant="h4">More Like This</Typography>
         <CustomStyledSimilarTVShowCards>
-          {fakeSimilarTVShowsData.map((similarShow, index) => (
+          {similarTVShows.map((similarTVShow, index) => (
             <CustomStyledSimilarTVShowCard key={index}>
               <Box className="similar-show-image">
                 <CardMedia
-                  image={similarShow.showBgImage}
-                  title={similarShow.showName}
+                  image={`${BG_IMAGE_URL}${similarTVShow.backdrop_path}`}
+                  title={similarTVShow.original_name}
                 />
-                <Typography>{similarShow.numberOfEpisodes} episodes</Typography>
+                <Typography>
+                  Rating: {similarTVShow.vote_average.toFixed(1)}
+                </Typography>
                 <Box className="dark-bg-cover"></Box>
               </Box>
               <CardContent>
-                <Typography variant="h5">{similarShow.showName}</Typography>
-                <Typography variant="h6">{similarShow.releaseDate}</Typography>
-                <Typography>{similarShow.showDescription}</Typography>
+                <Typography variant="h5">
+                  {similarTVShow.original_name}
+                </Typography>
+                <Typography variant="h6">
+                  {formattedDate(similarTVShow.first_air_date)}
+                </Typography>
+                <Typography>{`${similarTVShow.overview.slice(
+                  0,
+                  260
+                )}...`}</Typography>
               </CardContent>
               <CardActions>
-                <Button>Go to Show</Button>
+                <Button
+                  onClick={() =>
+                    handleSaveSimilarTVShowDetails(similarTVShow.id)
+                  }
+                >
+                  Go to Show
+                </Button>
               </CardActions>
             </CustomStyledSimilarTVShowCard>
           ))}
@@ -73,12 +132,16 @@ const CustomStyledSimilarTVShowsContent = styled(Box)(({ theme }) => ({
 const CustomStyledSimilarTVShowCards = styled(Box)(() => ({
   display: "flex",
   flexWrap: "wrap",
+  alignItems: "stretch",
   gap: "8px",
 }));
 
 const CustomStyledSimilarTVShowCard = styled(Card)(({ theme }) => ({
   boxShadow: "none",
   borderRadius: "12px",
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
   "& .similar-show-image": {
     position: "relative",
     height: "130px",
@@ -107,6 +170,7 @@ const CustomStyledSimilarTVShowCard = styled(Card)(({ theme }) => ({
   },
   "& .MuiCardContent-root": {
     padding: "10px",
+    flexGrow: 1,
     "& .MuiTypography-root": {
       color: theme.palette.info.main,
       lineHeight: 1.2,
@@ -123,6 +187,7 @@ const CustomStyledSimilarTVShowCard = styled(Card)(({ theme }) => ({
   },
   "& .MuiCardActions-root": {
     padding: "10px",
+    width: "100%",
     "& .MuiButtonBase-root": {
       margin: "0 auto",
       borderRadius: "8px",
@@ -162,7 +227,7 @@ const CustomStyledSimilarTVShowCard = styled(Card)(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {
     width: "24.4%",
     "& .similar-show-image": {
-      height: "160px",
+      height: "170px",
       "& .MuiTypography-root": {
         fontSize: "22px",
       },
