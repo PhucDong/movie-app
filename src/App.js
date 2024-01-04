@@ -16,7 +16,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<GuestHomePage />} />
       <Route path="user" element={<UserHomePage />} />
-      <Route path="user/:tvShowId" element={<DetailedTVShowInfoPage />} />
+      <Route path="user/:tVShowId" element={<DetailedTVShowInfoPage />} />
       <Route path="search" element={<SearchResultsPage />} />
       <Route path="detailed" element={<DetailedTVShowInfoPage />} />
     </Route>
