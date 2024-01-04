@@ -22,6 +22,7 @@ Add useContext to get login data
 
 ## Future features
 - Log out: to remove login data in local storage
+- User Home Page: generate random content for the hero section
 
 ## Next steps
 - Design page Can't find search results (done)

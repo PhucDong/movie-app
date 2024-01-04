@@ -218,3 +218,5 @@ const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
     },
   },
 }));
+
+// Source: https://developer.themoviedb.org/reference/tv-season-details

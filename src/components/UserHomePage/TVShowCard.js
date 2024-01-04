@@ -1,30 +1,19 @@
 import styled from "@emotion/styled";
 import { CardActionArea, CardContent, Typography } from "@mui/material";
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { BG_IMAGE_URL } from "../../app/config";
 
-export default function MovieCard({ categoryItem }) {
+export default function TVShowCard({ categoryItem }) {
   let randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  const navigate = useNavigate();
 
-
-  const handleNavigate = (movieId) => {
-    navigate(`${movieId}`);
-  };
-
-  console.log(15, categoryItem);
+  // console.log(9, categoryItem);
 
   return (
-    <CustomStyledMovieCardActionArea
-      // component={Link}
+    <CustomStyledTVShowCardActionArea
       bgImage={categoryItem.backdrop_path}
       randomColor={randomColor}
-      onClick={() => {
-        handleNavigate(categoryItem.id);
-      }}
     >
-      {categoryItem.hasOwnProperty("original_title") ? (
+      {categoryItem.hasOwnProperty("original_name") ? (
         <img
           src={`${BG_IMAGE_URL}${categoryItem.backdrop_path}`}
           alt={categoryItem.original_title}
@@ -34,16 +23,16 @@ export default function MovieCard({ categoryItem }) {
       )}
       <CardContent>
         <Typography>
-          {categoryItem.hasOwnProperty("original_title")
-            ? categoryItem.original_title
+          {categoryItem.hasOwnProperty("original_name")
+            ? categoryItem.original_name
             : categoryItem.name}
         </Typography>
       </CardContent>
-    </CustomStyledMovieCardActionArea>
+    </CustomStyledTVShowCardActionArea>
   );
 }
 
-const CustomStyledMovieCardActionArea = styled(CardActionArea, {
+const CustomStyledTVShowCardActionArea = styled(CardActionArea, {
   shouldForwardProp: (prop) => prop !== "bgImage" && prop !== "randomColor",
 })(({ bgImage, theme, randomColor }) => ({
   display: "inline-block",

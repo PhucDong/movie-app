@@ -1,14 +1,29 @@
-import { Box, Card, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
-import MovieCard from "./MovieCard";
 import styled from "@emotion/styled";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import { Link } from "react-router-dom";
+import TVShowCard from "./TVShowCard";
+import apiService from "../../app/apiService";
+import { API_KEY } from "../../app/config";
 
 export default function UserPageMovieCategory({ movieCategory }) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleSaveTVShowDetails = async (tvShowId) => {
+    try {
+      await apiService
+        .get(`/3/tv/${tvShowId}?api_key=${API_KEY}`)
+        .then((response) =>
+          localStorage.setItem("tvShowDetails", JSON.stringify(response.data))
+        );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -30,8 +45,10 @@ export default function UserPageMovieCategory({ movieCategory }) {
         {movieCategory.categoryItemsList.map((categoryItem, index) => (
           <Tab
             key={index}
-            component={Card}
-            label={<MovieCard categoryItem={categoryItem} />}
+            component={Link}
+            to={`${categoryItem.id}`}
+            onClick={() => handleSaveTVShowDetails(categoryItem.id)}
+            label={<TVShowCard categoryItem={categoryItem} />}
           />
         ))}
       </Tabs>

@@ -9,19 +9,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserHomePage() {
   const [heroSectionData, setHeroSectionData] = useState({
-    bgImage: "",
-    title: "",
-    releaseDate: "",
+    backdrop_path: "",
+    original_name: "",
+    first_air_date: "",
     genres: [],
-    description: "",
+    overview: "",
   });
-
-  const [topMoviesData, setTopMoviesData] = useState([]);
-  const [movieGenresData, setMovieGenresData] = useState([]);
-  const [actionMoviesData, setActionMoviesData] = useState([]);
-  const [adventureMoviesData, setAdventureMoviesData] = useState([]);
-  const [animationMoviesData, setAnimationMoviesData] = useState([]);
-  const [comedyMoviesData, setComedyMoviesData] = useState([]);
+  const [topTVShowsData, setTopTVShowsData] = useState([]);
+  const [tVShowGenresData, setTVShowGenresData] = useState([]);
+  const [actionAdventureShowsData, setActionAdventureShowsData] = useState([]);
+  const [crimeShowsData, setCrimeShowsData] = useState([]);
+  const [animationShowsData, setAnimationShowsData] = useState([]);
+  const [comedyShowsData, setComedyShowsData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -35,40 +34,40 @@ export default function UserHomePage() {
 
   const movieCategoryData = [
     {
-      heading: "Top Movies",
+      heading: "Top TV Shows",
       headingTextColor: "secondary",
       bgColor: "primary",
-      categoryItemsList: topMoviesData,
+      categoryItemsList: topTVShowsData,
     },
     {
       heading: "Browse by Genre",
       headingTextColor: "info",
       bgColor: "secondary",
-      categoryItemsList: movieGenresData,
+      categoryItemsList: tVShowGenresData,
     },
     {
-      heading: "Action",
+      heading: "Action & Adventure",
       headingTextColor: "secondary",
       bgColor: "primary",
-      categoryItemsList: actionMoviesData,
+      categoryItemsList: actionAdventureShowsData,
     },
     {
-      heading: "Adventure",
+      heading: "Crime",
       headingTextColor: "info",
       bgColor: "secondary",
-      categoryItemsList: adventureMoviesData,
+      categoryItemsList: crimeShowsData,
     },
     {
       heading: "Animation",
       headingTextColor: "secondary",
       bgColor: "primary",
-      categoryItemsList: animationMoviesData,
+      categoryItemsList: animationShowsData,
     },
     {
       heading: "Comedy",
       headingTextColor: "info",
       bgColor: "secondary",
-      categoryItemsList: comedyMoviesData,
+      categoryItemsList: comedyShowsData,
     },
   ];
 
@@ -77,117 +76,108 @@ export default function UserHomePage() {
     const fetchedHeroSectionData = async () => {
       try {
         await apiService
-          .get(`/3/movie/157336?api_key=${API_KEY}`)
-          .then((response) =>
-            setHeroSectionData({
-              ...heroSectionData,
-              bgImage: response.data.backdrop_path,
-              title: response.data.original_title,
-              releaseDate: response.data.release_date,
-              genres: [...response.data.genres],
-              description: response.data.overview,
-            })
-          );
+          .get(`/3/tv/40?api_key=${API_KEY}`)
+          .then((response) => setHeroSectionData({ ...response.data }));
       } catch (error) {
         console.log(error);
       }
     };
-    console.log(95, "Re-render hero section data");
+
     fetchedHeroSectionData();
   }, []);
 
-  // Get top movies data
+  // Get top TV Shows data
   useEffect(() => {
-    const fetchedTopMoviesData = async () => {
+    const fetchedTopTVShowsData = async () => {
       try {
         await apiService
-          .get(`/3/movie/top_rated?api_key=${API_KEY}&language=en-US&page=1`)
-          .then((response) => setTopMoviesData([...response.data.results]));
+          .get(`/3/tv/top_rated?api_key=${API_KEY}&language=en-US&page=1`)
+          .then((response) => setTopTVShowsData([...response.data.results]));
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchedTopMoviesData();
+    fetchedTopTVShowsData();
   }, []);
 
-  // Get movie genres data
+  // Get TV Show genres data
   useEffect(() => {
-    const fetchedMovieGenresData = async () => {
+    const fetchedTVShowGenresData = async () => {
       try {
         await apiService
-          .get(`/3/genre/movie/list?api_key=${API_KEY}`)
-          .then((response) => setMovieGenresData([...response.data.genres]));
+          .get(`/3/genre/tv/list?api_key=${API_KEY}`)
+          .then((response) => setTVShowGenresData([...response.data.genres]));
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchedMovieGenresData();
+    fetchedTVShowGenresData();
   }, []);
 
-  // Get action movies data
+  // Get action & adventure TV Shows data
   useEffect(() => {
-    const fetchedActionMoviesData = async () => {
+    const fetchedActionAdventureShowsData = async () => {
       try {
         await apiService
-          .get(`/3/discover/movie?api_key=${API_KEY}&with_genres=28&page=1`)
-          .then((response) => setActionMoviesData([...response.data.results]));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchedActionMoviesData();
-  }, []);
-
-  // Get adventure movies data
-  useEffect(() => {
-    const fetchedAdventureMoviesData = async () => {
-      try {
-        await apiService
-          .get(`/3/discover/movie?api_key=${API_KEY}&with_genres=12&page=1`)
+          .get(`/3/discover/tv?api_key=${API_KEY}&with_genres=10759&page=1`)
           .then((response) =>
-            setAdventureMoviesData([...response.data.results])
+            setActionAdventureShowsData([...response.data.results])
           );
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchedAdventureMoviesData();
+    fetchedActionAdventureShowsData();
   }, []);
 
-  // Get animation movies data
+  // Get crime TV Shows data
   useEffect(() => {
-    const fetchedAnimationMoviesData = async () => {
+    const fetchedCrimeShowsData = async () => {
       try {
         await apiService
-          .get(`/3/discover/movie?api_key=${API_KEY}&with_genres=16&page=1`)
+          .get(`/3/discover/tv?api_key=${API_KEY}&with_genres=80&page=1`)
+          .then((response) => setCrimeShowsData([...response.data.results]));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchedCrimeShowsData();
+  }, []);
+
+  // Get animation TV Shows data
+  useEffect(() => {
+    const fetchedAnimationShowsData = async () => {
+      try {
+        await apiService
+          .get(`/3/discover/tv?api_key=${API_KEY}&with_genres=16&page=1`)
           .then((response) =>
-            setAnimationMoviesData([...response.data.results])
+            setAnimationShowsData([...response.data.results])
           );
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchedAnimationMoviesData();
+    fetchedAnimationShowsData();
   }, []);
 
-  // Get comedy movies data
+  // Get comedy TV Shows data
   useEffect(() => {
-    const fetchedComedyMoviesData = async () => {
+    const fetchedComedyShowsData = async () => {
       try {
         await apiService
-          .get(`/3/discover/movie?api_key=${API_KEY}&with_genres=35&page=1`)
-          .then((response) => setComedyMoviesData([...response.data.results]));
+          .get(`/3/discover/tv?api_key=${API_KEY}&with_genres=35&page=1`)
+          .then((response) => setComedyShowsData([...response.data.results]));
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchedComedyMoviesData();
+    fetchedComedyShowsData();
   }, []);
 
   return (

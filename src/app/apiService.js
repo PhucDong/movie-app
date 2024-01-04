@@ -7,7 +7,7 @@ const apiService = axios.create({
 
 apiService.interceptors.request.use(
   (request) => {
-    console.log("Start request", request);
+    // console.log("Start request", request);
     return request;
   },
   function (error) {
@@ -17,7 +17,7 @@ apiService.interceptors.request.use(
 
 apiService.interceptors.response.use(
   (response) => {
-    console.log("Response", response);
+    // console.log("Response", response);
     return response;
   },
   function (error) {

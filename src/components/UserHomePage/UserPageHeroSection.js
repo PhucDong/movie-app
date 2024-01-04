@@ -2,16 +2,17 @@ import { Box, Button, Typography } from "@mui/material";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import styled from "@emotion/styled";
 import { BG_IMAGE_URL } from "../../app/config";
-import kDramasBgImage from "../../assets/images/UserHomePage/k-dramas_bgImage.jpg";
 
 export default function UserPageHeroSection({ heroSectionData }) {
   function formattedDate() {
     let options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(heroSectionData.releaseDate).toLocaleDateString(
+    return new Date(heroSectionData.first_air_date).toLocaleDateString(
       [],
       options
     );
   }
+
+  console.log(15, heroSectionData.genres);
 
   function formattedGenres() {
     let newGenres = [];
@@ -22,26 +23,22 @@ export default function UserPageHeroSection({ heroSectionData }) {
   }
 
   return (
-    // <CustomStyledHeroSectionOfUserPage bgImage={heroSectionData.bgImage}>
     <CustomStyledHeroSectionOfUserPage>
       <img
-        // src={`${BG_IMAGE_URL}${heroSectionData.bgImage}`}
-        // alt={heroSectionData.title}
-        src={kDramasBgImage}
-        alt="Bla bla bla"
+        src={`${BG_IMAGE_URL}${heroSectionData.backdrop_path}`}
+        alt={heroSectionData.original_name}
       />
       <Box className="hero-section_container">
         <Box className="hero-section_content">
           <Box className="hero-section_main-text">
-            {/* <Typography variant="h4">{heroSectionData.title}</Typography> */}
-            <Typography variant="h4">Hello World</Typography>
+            <Typography variant="h4">
+              {heroSectionData.original_name}
+            </Typography>
             <Typography className="movie-release-date">
-              {/* {formattedDate()} */}
-              22 Oct 2021
+              {formattedDate()}
             </Typography>
             <Typography className="movie-genres">
-              {/* Genres: {formattedGenres()} */}
-              Genres: Sci-Fi, Action
+              Genres: {formattedGenres()}
             </Typography>
           </Box>
 
@@ -58,10 +55,7 @@ export default function UserPageHeroSection({ heroSectionData }) {
             </Box>
 
             <Typography className="movie-description">
-              {/* {heroSectionData.description} */}
-              With his days numbered, high schooler Yuji decides to hunt down
-              and consume the remaining 19 fingers of a deadly curse so it can
-              die with him.
+              {heroSectionData.overview}
             </Typography>
           </Box>
         </Box>
