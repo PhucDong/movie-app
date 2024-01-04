@@ -10,15 +10,26 @@ import {
   Typography,
 } from "@mui/material";
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { useState } from "react";
-import topMovieBgImage from "../../assets/images/UserHomePage/top-movie_bgImage.jpg";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import fakeSeasonEpisodeData from "../fakeData/fakeSeasonEpisodeData";
+import apiService from "../../app/apiService";
+import { API_KEY, BG_IMAGE_URL } from "../../app/config";
 
-export default function TVShowSeasonSection() {
+export default function TVShowSeasonSection({ tVShowSeasonsData }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const openSeasonMenu = Boolean(anchorEl);
+  const [seasonNumber, setSeasonNumber] = useState(() => {
+    if (tVShowSeasonsData.seasons[0].name === "Specials") {
+      return 0;
+    } else {
+      return selectedIndex + 1;
+    }
+  });
+  const [seasonEpisodes, setSeasonEpisodes] = useState([]);
+
+  // console.log(24, selectedIndex);
+  // console.log(25, seasonNumber);
 
   const handleOpenSeasonMenu = (e) => {
     setAnchorEl(e.currentTarget);
@@ -28,10 +39,36 @@ export default function TVShowSeasonSection() {
     setAnchorEl(null);
     if (isNaN(index)) {
       setSelectedIndex(selectedIndex);
+      if (tVShowSeasonsData.seasons[0].name === "Specials") {
+        setSeasonNumber(selectedIndex);
+      } else {
+        setSeasonNumber(selectedIndex + 1);
+      }
     } else {
       setSelectedIndex(index);
+      if (tVShowSeasonsData.seasons[0].name === "Specials") {
+        setSeasonNumber(index);
+      } else {
+        setSeasonNumber(index + 1);
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchedSeasonEpisodes = async () => {
+      try {
+        await apiService
+          .get(
+            `3/tv/${tVShowSeasonsData.id}/season/${seasonNumber}?api_key=${API_KEY}`
+          )
+          .then((response) => setSeasonEpisodes([...response.data.episodes]));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchedSeasonEpisodes();
+  }, [seasonNumber, tVShowSeasonsData.id]);
 
   return (
     <CustomStyledSeasonSection>
@@ -40,7 +77,7 @@ export default function TVShowSeasonSection() {
         onClick={handleOpenSeasonMenu}
         endIcon={<KeyboardArrowDown />}
       >
-        Season {selectedIndex + 1}
+        Season {seasonNumber}
       </CustomStyledSeasonButton>
 
       <Menu
@@ -48,44 +85,40 @@ export default function TVShowSeasonSection() {
         open={openSeasonMenu}
         onClose={handleCloseSeasonMenu}
       >
-        {fakeSeasonEpisodeData.map((season, index) => (
+        {tVShowSeasonsData.seasons.map((season, index) => (
           <MenuItem
-            key={season.seasonNumber}
+            key={season.season_number}
             selected={index === selectedIndex}
             onClick={(e) => handleCloseSeasonMenu(e, index)}
           >
-            Season {season.seasonNumber}
+            Season {season.season_number}
           </MenuItem>
         ))}
       </Menu>
 
       <CustomStyledEpisodeCards>
-        {selectedIndex + 1 === fakeSeasonEpisodeData[selectedIndex].seasonNumber
-          ? fakeSeasonEpisodeData[selectedIndex].episodes.map(
-              (episode, index) => (
-                <CustomStyledEpisodeCard key={index}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image={topMovieBgImage}
-                      alt="Bla bla ble"
-                    />
-                    <CardContent>
-                      <Typography className="episode-title">
-                        Episode {episode.episodeNumber}: {episode.episodeTitle}
-                      </Typography>
-                      <Typography className="episode-duration">
-                        {episode.episodeDuration}
-                      </Typography>
-                      <Typography className="episode-description">
-                        {episode.episodeDescription}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </CustomStyledEpisodeCard>
-              )
-            )
-          : ""}
+        {seasonEpisodes.map((episode, index) => (
+          <CustomStyledEpisodeCard key={index}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                image={`${BG_IMAGE_URL}${episode.still_path}`}
+                alt={episode.name}
+              />
+              <CardContent>
+                <Typography className="episode-title">
+                  Episode {episode.episode_number}: {episode.name}
+                </Typography>
+                <Typography className="episode-duration">
+                  {episode.runtime ? `${episode.runtime}m` : "Coming Soon"}
+                </Typography>
+                <Typography className="episode-description">
+                  {`${episode.overview.slice(0, 200)}...`}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </CustomStyledEpisodeCard>
+        ))}
       </CustomStyledEpisodeCards>
     </CustomStyledSeasonSection>
   );
@@ -144,7 +177,10 @@ const CustomStyledEpisodeCards = styled(Box)(() => ({
 const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
   borderRadius: "12px",
   boxShadow: "none",
+  minHeight: "160px",
   "& .MuiCardActionArea-root": {
+    width: "100%",
+    minHeight: "160px",
     display: "flex",
     alignItems: "stretch",
     "& img": {
@@ -152,6 +188,7 @@ const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
       height: "auto",
     },
     "& .MuiCardContent-root": {
+      width: "100%",
       padding: "10px",
       "& .MuiTypography-root": {
         fontSize: "14px",
@@ -218,5 +255,3 @@ const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
     },
   },
 }));
-
-// Source: https://developer.themoviedb.org/reference/tv-season-details
