@@ -1,22 +1,24 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import fakeCastData from "../fakeData/fakeCastData";
+import { BG_IMAGE_URL } from "../../app/config";
 
-export default function CastAndCrewSection() {
+export default function CastAndCrewSection({ castAndCrewData }) {
   return (
     <CustomStyledCastSection>
       <CustomStyledCastContent>
         <Typography variant="h4">Cast & Crew</Typography>
         <CustomCastAndCrewCards>
-          {fakeCastData.map((cast, index) => (
+          {castAndCrewData.map((cast, index) => (
             <CustomCastAndCrewCard key={index}>
               <Avatar
                 variant="circular"
-                src={cast.profilePic}
-                alt={cast.fullName}
+                src={`${BG_IMAGE_URL}${cast.profile_path}`}
+                alt={cast.original_name}
               />
-              <Typography variant="h6">{cast.fullName}</Typography>
-              <Typography>{cast.role}</Typography>
+              <Box className="cast-info">
+                <Typography variant="h6">{cast.original_name}</Typography>
+                <Typography>{cast.character}</Typography>
+              </Box>
             </CustomCastAndCrewCard>
           ))}
         </CustomCastAndCrewCards>
@@ -60,34 +62,34 @@ const CustomCastAndCrewCards = styled(Box)(({ theme }) => ({
   [theme.breakpoints.between("sm", "md")]: {
     gap: "30px",
   },
-  [theme.breakpoints.between("md", "lg")]: {
-    gap: "34px",
-  },
   [theme.breakpoints.up("lg")]: {
-    gap: "38px",
+    gap: "34px",
+    justifyContent: "normal",
   },
 }));
 
 const CustomCastAndCrewCard = styled(Box)(({ theme }) => ({
   display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "4px",
+  gap: "8px",
+  width: "46%",
+  "& .cast-info": { alignSelf: "center" },
   "& h6": {
-    fontSize: "15px",
+    fontSize: "14px",
     fontWeight: 600,
+    marginBottom: "6px",
   },
   "& p": {
-    fontSize: "15px",
+    fontSize: "13px",
   },
   "& .MuiAvatar-root": {
-    width: "82px",
-    height: "82px",
+    width: "78px",
+    height: "78px",
     "& .MuiAvatar-img": {
       borderRadius: "50%",
     },
   },
   [theme.breakpoints.between("sm", "md")]: {
+    width: "46%",
     "& h6": {
       fontSize: "18px",
     },
@@ -100,6 +102,7 @@ const CustomCastAndCrewCard = styled(Box)(({ theme }) => ({
     },
   },
   [theme.breakpoints.between("md", "lg")]: {
+    width: "31.5%",
     "& h6": {
       fontSize: "20px",
     },
@@ -112,11 +115,12 @@ const CustomCastAndCrewCard = styled(Box)(({ theme }) => ({
     },
   },
   [theme.breakpoints.up("lg")]: {
+    width: "22.5%",
     "& h6": {
-      fontSize: "22px",
+      fontSize: "20px",
     },
     "& p": {
-      fontSize: "18px",
+      fontSize: "17px",
     },
     "& .MuiAvatar-root": {
       width: "130px",
