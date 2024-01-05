@@ -1,13 +1,26 @@
 import { Box, Typography } from "@mui/material";
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
+
+  const handleClickLogoFooter = () => {
+    if (localStorage.getItem("isValidUser")) {
+      navigate("/user");
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <CustomStyledFooter>
       <Box>
         <Box className="footer-main-content">
           <Box>
-            <Typography variant="h4">MovieDB</Typography>
+            <Typography variant="h4" onClick={handleClickLogoFooter}>
+              MovieDB
+            </Typography>
           </Box>
           <Box>
             <Typography variant="h5">Contacts</Typography>
@@ -38,6 +51,7 @@ const CustomStyledFooter = styled(Box)(({ theme }) => ({
     fontSize: "30px",
     fontWeight: 700,
     marginBottom: "26px",
+    cursor: "pointer",
   },
   "& h5": {
     fontSize: "24px",

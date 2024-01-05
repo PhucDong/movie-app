@@ -28,6 +28,8 @@ export default function UserHomePage() {
     if (e.key === "Enter") {
       e.preventDefault();
       localStorage.setItem("searchValue", e.target.value);
+      localStorage.removeItem("genreTVShows");
+      localStorage.removeItem("tVShowGenreTitle");
       navigate("/search");
     }
   };
@@ -184,8 +186,8 @@ export default function UserHomePage() {
     <Box sx={{ flexGrow: 1 }}>
       <UserPageHeroSection heroSectionData={heroSectionData} />
       <UserPageSearchBar handleKeyDown={handleKeyDown} />
-      {movieCategoryData.map((movieCategory, index) => (
-        <UserPageMovieCategory key={index} movieCategory={movieCategory} />
+      {movieCategoryData.map((tVShowCategory, index) => (
+        <UserPageMovieCategory key={index} tVShowCategory={tVShowCategory} />
       ))}
     </Box>
   );

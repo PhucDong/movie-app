@@ -16,9 +16,9 @@ import apiService from "../../app/apiService";
 import { API_KEY, BG_IMAGE_URL } from "../../app/config";
 
 export default function TVShowSeasonSection({ tVShowSeasonsData }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [dropdownSeasonMenu, setDropdownSeasonMenu] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const openSeasonMenu = Boolean(anchorEl);
+  const openSeasonMenu = Boolean(dropdownSeasonMenu);
   const [seasonNumber, setSeasonNumber] = useState(() => {
     if (tVShowSeasonsData.seasons[0].name === "Specials") {
       return 0;
@@ -32,11 +32,11 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
   // console.log(25, seasonNumber);
 
   const handleOpenSeasonMenu = (e) => {
-    setAnchorEl(e.currentTarget);
+    setDropdownSeasonMenu(e.currentTarget);
   };
 
   const handleCloseSeasonMenu = (e, index) => {
-    setAnchorEl(null);
+    setDropdownSeasonMenu(null);
     if (isNaN(index)) {
       setSelectedIndex(selectedIndex);
       if (tVShowSeasonsData.seasons[0].name === "Specials") {
@@ -81,7 +81,7 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
       </CustomStyledSeasonButton>
 
       <Menu
-        anchorEl={anchorEl}
+        anchorEl={dropdownSeasonMenu}
         open={openSeasonMenu}
         onClose={handleCloseSeasonMenu}
       >

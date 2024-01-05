@@ -1,27 +1,47 @@
 import styled from "@emotion/styled";
 import { Box, CardActionArea, CardContent, Typography } from "@mui/material";
 import React from "react";
-import { BG_IMAGE_URL } from "../../app/config";
+import { API_KEY, BG_IMAGE_URL } from "../../app/config";
+import apiService from "../../app/apiService";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchResultCard({ searchResult }) {
   let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  const navigate = useNavigate();
+
+  const handleSaveResultTVShowDetails = async (searchResultId) => {
+    try {
+      await apiService
+        .get(
+          `/3/tv/${searchResultId}?api_key=${API_KEY}&append_to_response=credits`
+        )
+        .then((response) =>
+          localStorage.setItem("tVShowDetails", JSON.stringify(response.data))
+        );
+    } catch (error) {
+      console.log(error);
+    }
+
+    navigate(`/user/${searchResultId}`);
+  };
 
   return (
     <CustomStyledSearchResultCardActionArea
       component={Box}
       bgImage={searchResult.backdrop_path}
       randomColor={randomColor}
+      onClick={() => handleSaveResultTVShowDetails(searchResult.id)}
     >
       {searchResult.backdrop_path ? (
         <img
           src={`${BG_IMAGE_URL}${searchResult.backdrop_path}`}
-          alt={searchResult.original_title}
+          alt={searchResult.original_name}
         />
       ) : (
         ""
       )}
       <CardContent>
-        <Typography>{searchResult.original_title}</Typography>
+        <Typography>{searchResult.original_name}</Typography>
       </CardContent>
     </CustomStyledSearchResultCardActionArea>
   );

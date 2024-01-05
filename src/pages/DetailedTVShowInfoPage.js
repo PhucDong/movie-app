@@ -4,10 +4,11 @@ import styled from "@emotion/styled";
 import TVShowSeasonSection from "../components/DetailedTVShowInfoPage/TVShowSeasonSection";
 import CastAndCrewSection from "../components/DetailedTVShowInfoPage/CastAndCrewSection";
 import SimilarTVShowsSection from "../components/DetailedTVShowInfoPage/SimilarTVShowsSection";
+import { useState } from "react";
 
 export default function DetailedInfoPage() {
-  let tVShowDetailsLocalData = JSON.parse(
-    localStorage.getItem("tVShowDetails")
+  const [tVShowDetailsLocalData, setTVShowDetailsLocalData] = useState(
+    JSON.parse(localStorage.getItem("tVShowDetails"))
   );
 
   return (

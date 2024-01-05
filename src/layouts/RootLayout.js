@@ -5,6 +5,10 @@ import Footer from "../components/Footer";
 import { Box } from "@mui/material";
 
 export default function RootLayout() {
+  if (window.location.pathname === "/") {
+    localStorage.clear();
+  }
+
   return (
     <Box
       sx={{

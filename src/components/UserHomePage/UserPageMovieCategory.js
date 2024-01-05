@@ -7,36 +7,57 @@ import TVShowCard from "./TVShowCard";
 import apiService from "../../app/apiService";
 import { API_KEY } from "../../app/config";
 
-export default function UserPageMovieCategory({ movieCategory }) {
+export default function UserPageMovieCategory({ tVShowCategory }) {
   const [value, setValue] = useState(0);
-  // const [tVShowDetailsData, setTVShowDetailsData] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const handleSaveTVShowDetails = async (tVShowId) => {
+  const handleSaveTVShowDetails = async (
+    categoryItemId,
+    categoryHeading,
+    tVShowGenreTitle
+  ) => {
     try {
       await apiService
-        .get(`/3/tv/${tVShowId}?api_key=${API_KEY}&append_to_response=credits`)
+        .get(
+          categoryHeading === "Browse by Genre"
+            ? `3/discover/tv?api_key=${API_KEY}&with_genres=${categoryItemId}&page=1`
+            : `/3/tv/${categoryItemId}?api_key=${API_KEY}&append_to_response=credits`
+        )
+
         .then((response) =>
-          localStorage.setItem("tVShowDetails", JSON.stringify(response.data))
+          categoryHeading === "Browse by Genre"
+            ? (localStorage.setItem(
+                "genreTVShows",
+                JSON.stringify(response.data.results)
+              ),
+              localStorage.setItem("tVShowGenreTitle", tVShowGenreTitle))
+            : localStorage.setItem(
+                "tVShowDetails",
+                JSON.stringify(response.data)
+              )
         );
     } catch (error) {
       console.log(error);
     }
 
-    navigate(`${tVShowId}`);
+    navigate(
+      categoryHeading === "Browse by Genre"
+        ? `/search/${categoryItemId}`
+        : `${categoryItemId}`
+    );
   };
 
   return (
     <CustomStyledMovieCategorySection
-      headingTextColor={movieCategory.headingTextColor}
-      bgColor={movieCategory.bgColor}
+      headingTextColor={tVShowCategory.headingTextColor}
+      bgColor={tVShowCategory.bgColor}
     >
       <Box className="movie-category_heading-section">
-        <Typography variant="h4">{movieCategory.heading}</Typography>
+        <Typography variant="h4">{tVShowCategory.heading}</Typography>
         <ArrowForwardIosRoundedIcon />
       </Box>
       <Tabs
@@ -46,11 +67,17 @@ export default function UserPageMovieCategory({ movieCategory }) {
         scrollButtons={false}
         allowScrollButtonsMobile
       >
-        {movieCategory.categoryItemsList.map((categoryItem, index) => (
+        {tVShowCategory.categoryItemsList.map((categoryItem, index) => (
           <Tab
             key={index}
             component={Card}
-            onClick={() => handleSaveTVShowDetails(categoryItem.id)}
+            onClick={() =>
+              handleSaveTVShowDetails(
+                categoryItem.id,
+                tVShowCategory.heading,
+                categoryItem.name
+              )
+            }
             label={<TVShowCard categoryItem={categoryItem} />}
           />
         ))}

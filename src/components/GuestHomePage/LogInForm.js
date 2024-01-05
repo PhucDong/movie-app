@@ -38,16 +38,16 @@ export default function LogInForm(props) {
     resolver: yupResolver(schema),
   });
 
-  console.log(41, watch());
+  // console.log(41, watch());
 
   const onSubmit = (data) => {
-    console.log(42, data);
+    // console.log(44, data);
     localStorage.setItem("email", data.email);
     localStorage.setItem("password", data.password);
 
     if (checkValidUser()) {
       onCloseLogInForm();
-      navigate("/user");
+      navigate("/user", { replace: true });
     }
   };
 

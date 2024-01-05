@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
-import { AppBar, Box, Button, Typography } from "@mui/material";
+import { AppBar, Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import LogInForm from "./GuestHomePage/LogInForm";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const registeredUser = {
   email: "dvmp1014@gmail.com",
@@ -13,6 +15,9 @@ const registeredUser = {
 export default function NavBar() {
   const [openLogInForm, setOpenLogInForm] = useState(false);
   const [isValidUser, setIsValidUser] = useState(false);
+  const [dropdownProfileMenu, setDropdownProfileMenu] = useState(null);
+  const openProfileMenu = Boolean(dropdownProfileMenu);
+  const navigate = useNavigate();
 
   const handleOpenLogInForm = () => {
     setOpenLogInForm(true);
@@ -35,15 +40,51 @@ export default function NavBar() {
     return false;
   };
 
-  console.log(34, isValidUser);
+  console.log(43, isValidUser);
+
+  const handleOpenDropdownProfileMenu = (e) => {
+    setDropdownProfileMenu(e.currentTarget);
+  };
+
+  const handleCloseDropdownProfileMenu = () => {
+    setDropdownProfileMenu(null);
+  };
+
+  const handleSignOut = () => {
+    localStorage.clear();
+    setDropdownProfileMenu(null);
+    navigate("/", { replace: true });
+  };
+
+  const handleClickLogoNavBar = () => {
+    if (localStorage.getItem("isValidUser")) {
+      navigate("/user");
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
     <CustomStyledNavBarContainer>
       <AppBar>
         {localStorage.getItem("isValidUser") ? <MenuIcon /> : ""}
-        <Typography className="brand-logo">MovieDB</Typography>
+        <Typography className="brand-logo" onClick={handleClickLogoNavBar}>
+          MovieDB
+        </Typography>
         {localStorage.getItem("isValidUser") ? (
-          <AccountCircleOutlinedIcon className="registered-user-icon" />
+          <>
+            <AccountCircleOutlinedIcon
+              className="registered-user-icon"
+              onClick={handleOpenDropdownProfileMenu}
+            />
+            <Menu
+              anchorEl={dropdownProfileMenu}
+              open={openProfileMenu}
+              onClose={handleCloseDropdownProfileMenu}
+            >
+              <MenuItem onClick={handleSignOut}>Sign out of MovieDB</MenuItem>
+            </Menu>
+          </>
         ) : (
           <Button
             className="signIn-button"
@@ -80,11 +121,13 @@ const CustomStyledNavBarContainer = styled(Box)(({ theme }) => ({
   "& .MuiSvgIcon-root": {
     fontSize: "40px",
     color: theme.palette.secondary.main,
+    cursor: "pointer",
   },
   "& .brand-logo": {
     color: theme.palette.secondary.main,
     fontSize: "20px",
     fontWeight: 700,
+    cursor: "pointer",
   },
   "& .signIn-button": {
     color: theme.palette.info.main,
