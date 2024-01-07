@@ -58,7 +58,7 @@ export default function NavBar() {
 
   const handleClickLogoNavBar = () => {
     if (localStorage.getItem("isValidUser")) {
-      navigate("/user");
+      navigate("/browse");
     } else {
       navigate("/");
     }

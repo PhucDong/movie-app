@@ -7,7 +7,7 @@ export default function Footer() {
 
   const handleClickLogoFooter = () => {
     if (localStorage.getItem("isValidUser")) {
-      navigate("/user");
+      navigate("/browse");
     } else {
       navigate("/");
     }
