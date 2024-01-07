@@ -34,8 +34,7 @@ export default function SimilarTVShowsSection({ similarTVShowsData }) {
     } catch (error) {
       console.log(error);
     }
-
-    window.location.reload(true);
+    
     navigate(`/browse/tVShow/${similarTVShowId}`);
   };
 
