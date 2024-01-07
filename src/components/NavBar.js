@@ -4,7 +4,6 @@ import LogInForm from "./GuestHomePage/LogInForm";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { KeyboardArrowDown } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const registeredUser = {
@@ -33,14 +32,11 @@ export default function NavBar() {
       registeredUser.password === localStorage.getItem("password")
     ) {
       setIsValidUser(true);
-      console.log(31, "Clicked!");
       localStorage.setItem("isValidUser", true);
       return true;
     }
     return false;
   };
-
-  console.log(43, isValidUser);
 
   const handleOpenDropdownProfileMenu = (e) => {
     setDropdownProfileMenu(e.currentTarget);
