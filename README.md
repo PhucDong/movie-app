@@ -1,9 +1,7 @@
-# Mentor Meeeting
-
-Add useContext to get login data
+# Movie App
+Last update: **7 Jan 2024**
 
 ## Pages
-
 ### User Home Page
 
 - Hero section:
@@ -28,12 +26,10 @@ Add useContext to get login data
 
 ## Future features
 
-- Log out: to remove login data in local storage
 - User Home Page: generate random content for the hero section
-- Detailed TV Show Info Page:
+- Detailed TV Show Info Page: add pagination in More Like This section
 
 ## Next steps
 
-- After logging in, can't return to Guest Home Page (done)
-- Adding log out feature, and users can't go back to the previous page (done)
-- After clicking on a TV show genre, display shows of that genre (done)
+- Fetch data whenever a parameter changed (on going)
+- Implementing hamburger menu (on going)
