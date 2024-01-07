@@ -85,8 +85,6 @@ export default function SearchResultsPage() {
     localStorage.removeItem("tVShowGenreId");
   }, [tVShowGenreId, searchResultsPageNumber]);
 
-  console.log(85, searchResults);
-
   return (
     <>
       {JSON.parse(localStorage.getItem("genreTVShows")) ? (
