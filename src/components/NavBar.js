@@ -8,7 +8,7 @@ import { KeyboardArrowDown } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const registeredUser = {
-  email: "dvmp1014@gmail.com",
+  email: "phuc@gmail.com",
   password: "helloWORLD@1014",
 };
 

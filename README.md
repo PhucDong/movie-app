@@ -1,7 +1,14 @@
 # Movie App
+
 Last update: **7 Jan 2024**
 
 ## Pages
+
+### Log in credentials
+
+- email: "phuc@gmail.com",
+- password: "helloWORLD@1014",
+
 ### User Home Page
 
 - Hero section:
