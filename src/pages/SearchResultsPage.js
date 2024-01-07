@@ -11,7 +11,7 @@ import { CustomStylePagination } from "../components/UserHomePage/UserPageMovieC
 export default function SearchResultsPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchValue, setSearchValue] = useState(
-    localStorage.getItem("searchValue")
+    localStorage.getItem("searchValue").length > 0
       ? localStorage.getItem("searchValue")
       : ""
   );
@@ -27,7 +27,6 @@ export default function SearchResultsPage() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault();
       setSearchValue(localStorage.getItem("searchValue"));
     }
   };
@@ -56,6 +55,9 @@ export default function SearchResultsPage() {
       };
 
       fetchedSearchBarResultsData();
+    } else {
+      setSearchResultsPages(0);
+      setSearchResults([]);
     }
   }, [searchValue, searchResultsPageNumber]);
 
@@ -78,7 +80,11 @@ export default function SearchResultsPage() {
 
       fetchedTVShowResultsData();
     }
+
+    localStorage.removeItem("tVShowGenreId");
   }, [tVShowGenreId, searchResultsPageNumber]);
+
+  console.log(85, searchResults);
 
   return (
     <>
@@ -89,7 +95,7 @@ export default function SearchResultsPage() {
       )}
       <CustomStyledSearchResultsContainer tVShowGenreTitle={tVShowGenreTitle}>
         <Box>
-          {Array.isArray(searchResults) && searchResults.length > 0 ? (
+          {searchResults.length > 0 ? (
             <>
               <Typography className="search-results_heading">
                 {tVShowGenreTitle
@@ -101,7 +107,6 @@ export default function SearchResultsPage() {
                   <SearchResultCard
                     key={searchResult.id}
                     searchResult={searchResult}
-                    // onClick={() => console.log("Hello!")}
                   />
                 ))}
               </CustomStyledSearchResultCards>
