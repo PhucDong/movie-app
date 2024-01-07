@@ -39,7 +39,8 @@ export default function UserPageMovieCategory(props) {
                 "genreTVShows",
                 JSON.stringify(response.data.results)
               ),
-              localStorage.setItem("tVShowGenreTitle", tVShowGenreTitle))
+              localStorage.setItem("tVShowGenreTitle", tVShowGenreTitle),
+              localStorage.setItem("tVShowGenreId", categoryItemId))
             : localStorage.setItem(
                 "tVShowDetails",
                 JSON.stringify(response.data)
