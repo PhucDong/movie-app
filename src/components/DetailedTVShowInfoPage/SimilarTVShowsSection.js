@@ -36,7 +36,7 @@ export default function SimilarTVShowsSection({ similarTVShowsData }) {
     }
 
     window.location.reload(true);
-    navigate(`/user/${similarTVShowId}`);
+    navigate(`/browse/tVShow/${similarTVShowId}`);
   };
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function SimilarTVShowsSection({ similarTVShowsData }) {
     };
 
     fetchedSimilarTVShows();
-  });
+  }, [similarTVShowsData.id]);
 
   return (
     <CustomStyledSimilarTVShowsSection>
