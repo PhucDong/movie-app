@@ -27,6 +27,7 @@ export default function SearchResultsPage() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       setSearchValue(localStorage.getItem("searchValue"));
     }
   };
