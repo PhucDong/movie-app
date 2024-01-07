@@ -16,10 +16,10 @@ const router = createBrowserRouter(
     <Route element={<ScrollToTopLayout />}>
       <Route path="/" element={<RootLayout />}>
         <Route index element={<GuestHomePage />} />
-        <Route path="user" element={<UserHomePage />} />
-        <Route path="user/:tVShowId" element={<DetailedTVShowInfoPage />} />
+        <Route path="browse" element={<UserHomePage />} />
+        <Route path="browse/tVShow/:tVShowId" element={<DetailedTVShowInfoPage />} />
         <Route path="search" element={<SearchResultsPage />} />
-        <Route path="search/:resultId" element={<SearchResultsPage />} />
+        <Route path="search/tVShowGenre/:tVShowGenreId" element={<SearchResultsPage />} />
         <Route path="detailed" element={<DetailedTVShowInfoPage />} />
       </Route>
     </Route>
