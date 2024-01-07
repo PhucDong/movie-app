@@ -110,7 +110,7 @@ export default function SearchResultsPage() {
             <UnavailableSearchResult searchValue={searchValue} />
           )}
         </Box>
-        {searchResultsPages ? (
+        {searchResultsPages && searchResults.length > 0 ? (
           <CustomStylePagination
             count={searchResultsPages > 500 ? 500 : searchResultsPages}
             page={searchResultsPageNumber}
