@@ -47,7 +47,7 @@ export default function LogInForm(props) {
 
     if (checkValidUser()) {
       onCloseLogInForm();
-      navigate("/user", { replace: true });
+      navigate("/browse", { replace: true });
     }
   };
 
