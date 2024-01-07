@@ -20,16 +20,17 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const openSeasonMenu = Boolean(dropdownSeasonMenu);
   const [seasonNumber, setSeasonNumber] = useState(() => {
-    if (tVShowSeasonsData.seasons[0].name === "Specials") {
-      return 0;
+    if (tVShowSeasonsData.seasons.length > 0) {
+      if (tVShowSeasonsData.seasons[0].name === "Specials") {
+        return 0;
+      } else {
+        return 1;
+      }
     } else {
-      return selectedIndex + 1;
+      return;
     }
   });
   const [seasonEpisodes, setSeasonEpisodes] = useState([]);
-
-  // console.log(24, selectedIndex);
-  // console.log(25, seasonNumber);
 
   const handleOpenSeasonMenu = (e) => {
     setDropdownSeasonMenu(e.currentTarget);
@@ -55,19 +56,21 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
   };
 
   useEffect(() => {
-    const fetchedSeasonEpisodes = async () => {
-      try {
-        await apiService
-          .get(
-            `3/tv/${tVShowSeasonsData.id}/season/${seasonNumber}?api_key=${API_KEY}`
-          )
-          .then((response) => setSeasonEpisodes([...response.data.episodes]));
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    if (seasonNumber !== null) {
+      const fetchedSeasonEpisodes = async () => {
+        try {
+          await apiService
+            .get(
+              `3/tv/${tVShowSeasonsData.id}/season/${seasonNumber}?api_key=${API_KEY}`
+            )
+            .then((response) => setSeasonEpisodes([...response.data.episodes]));
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    fetchedSeasonEpisodes();
+      fetchedSeasonEpisodes();
+    }
   }, [seasonNumber, tVShowSeasonsData.id]);
 
   return (
@@ -80,21 +83,25 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
         Season {seasonNumber}
       </CustomStyledSeasonButton>
 
-      <Menu
-        anchorEl={dropdownSeasonMenu}
-        open={openSeasonMenu}
-        onClose={handleCloseSeasonMenu}
-      >
-        {tVShowSeasonsData.seasons.map((season, index) => (
-          <MenuItem
-            key={season.season_number}
-            selected={index === selectedIndex}
-            onClick={(e) => handleCloseSeasonMenu(e, index)}
-          >
-            Season {season.season_number}
-          </MenuItem>
-        ))}
-      </Menu>
+      {seasonNumber === null ? (
+        ""
+      ) : (
+        <Menu
+          anchorEl={dropdownSeasonMenu}
+          open={openSeasonMenu}
+          onClose={handleCloseSeasonMenu}
+        >
+          {tVShowSeasonsData.seasons.map((season, index) => (
+            <MenuItem
+              key={season.season_number}
+              selected={index === selectedIndex}
+              onClick={(e) => handleCloseSeasonMenu(e, index)}
+            >
+              Season {season.season_number}
+            </MenuItem>
+          ))}
+        </Menu>
+      )}
 
       <CustomStyledEpisodeCards>
         {seasonEpisodes.map((episode, index) => (
