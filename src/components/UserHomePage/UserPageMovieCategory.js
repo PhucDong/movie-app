@@ -1,17 +1,22 @@
-import { Box, Card, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
+import { Box, Card, Pagination, Tab, Tabs, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TVShowCard from "./TVShowCard";
 import apiService from "../../app/apiService";
 import { API_KEY } from "../../app/config";
 
-export default function UserPageMovieCategory({ tVShowCategory }) {
+export default function UserPageMovieCategory(props) {
+  const { tVShowCategory, tVShowCategoryId } = props;
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [showsData, setShowsData] = useState([]);
+  // const { tVShowId, tVShowGenreId } = useParams();
 
-  const handleChange = (event, newValue) => {
+  const handleChangeTab = (event, newValue) => {
     setValue(newValue);
   };
 
@@ -23,13 +28,13 @@ export default function UserPageMovieCategory({ tVShowCategory }) {
     try {
       await apiService
         .get(
-          categoryHeading === "Browse by Genre"
+          categoryHeading === "Browse by Genres"
             ? `3/discover/tv?api_key=${API_KEY}&with_genres=${categoryItemId}&page=1`
             : `/3/tv/${categoryItemId}?api_key=${API_KEY}&append_to_response=credits`
         )
 
         .then((response) =>
-          categoryHeading === "Browse by Genre"
+          categoryHeading === "Browse by Genres"
             ? (localStorage.setItem(
                 "genreTVShows",
                 JSON.stringify(response.data.results)
@@ -45,11 +50,65 @@ export default function UserPageMovieCategory({ tVShowCategory }) {
     }
 
     navigate(
-      categoryHeading === "Browse by Genre"
-        ? `/search/${categoryItemId}`
-        : `${categoryItemId}`
+      categoryHeading === "Browse by Genres"
+        ? `/search/tVShowGenre/${categoryItemId}`
+        : `/browse/tVShow/${categoryItemId}`
     );
   };
+
+  const handleChangePagination = (event, newValue) => {
+    setPageNumber(newValue);
+  };
+
+  useEffect(() => {
+    const fetchedShowsData = async () => {
+      try {
+        await apiService
+          .get(
+            tVShowCategory.heading === "Browse by Genres"
+              ? `/3/genre/tv/list?api_key=${API_KEY}`
+              : tVShowCategory.heading === "Top TV Shows"
+              ? `/3/tv/top_rated?api_key=${API_KEY}&language=en-US&page=${pageNumber}`
+              : `/3/discover/tv?api_key=${API_KEY}&with_genres=${tVShowCategory.categoryId}&page=${pageNumber}`
+          )
+          .then((response) =>
+            tVShowCategory.heading !== "Browse by Genres"
+              ? (setPages(response.data.total_pages),
+                setShowsData([...response.data.results]))
+              : setShowsData([...response.data.genres])
+          );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchedShowsData();
+  }, [pageNumber, tVShowCategory.categoryId, tVShowCategory.heading]);
+
+  // useEffect(() => {
+  //   if (tVShowGenreId && tVShowId) {
+  //     const fetchedDataWithURLParameter = async () => {
+  //       try {
+  //         await apiService
+  //           .get(
+  //             tVShowCategory.heading === "Browse by Genres"
+  //               ? `3/discover/tv?api_key=${API_KEY}&with_genres=${tVShowGenreId}&page=1`
+  //               : `/3/tv/${tVShowId}?api_key=${API_KEY}&append_to_response=credits`
+  //           )
+  //           .then((response) =>
+  //             tVShowCategory.heading !== "Browse by Genres"
+  //               ? (setPages(response.data.total_pages),
+  //                 setShowsData([...response.data.results]))
+  //               : setShowsData([...response.data.genres])
+  //           );
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     };
+
+  //     fetchedDataWithURLParameter();
+  //   }
+  // }, [tVShowId, tVShowGenreId, tVShowCategory.heading]);
 
   return (
     <CustomStyledMovieCategorySection
@@ -62,12 +121,12 @@ export default function UserPageMovieCategory({ tVShowCategory }) {
       </Box>
       <Tabs
         value={value}
-        onChange={handleChange}
+        onChange={handleChangeTab}
         variant="scrollable"
         scrollButtons={false}
         allowScrollButtonsMobile
       >
-        {tVShowCategory.categoryItemsList.map((categoryItem, index) => (
+        {showsData.map((categoryItem, index) => (
           <Tab
             key={index}
             component={Card}
@@ -82,6 +141,16 @@ export default function UserPageMovieCategory({ tVShowCategory }) {
           />
         ))}
       </Tabs>
+
+      {tVShowCategory.heading !== "Browse by Genres" ? (
+        <CustomStylePagination
+          count={pages > 500 ? 500 : pages}
+          page={pageNumber}
+          onChange={handleChangePagination}
+        />
+      ) : (
+        ""
+      )}
     </CustomStyledMovieCategorySection>
   );
 }
@@ -138,5 +207,92 @@ const CustomStyledMovieCategorySection = styled(Box, {
   },
   [theme.breakpoints.up("lg")]: {
     padding: "50px 87px 32px 87px",
+  },
+}));
+
+export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
+  width: "100%",
+  marginTop: "14px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  "& .MuiButtonBase-root": {
+    padding: 0,
+    margin: 0,
+    "& svg": {
+      fontSize: "24px",
+    },
+  },
+  "& li:first-of-type": {
+    marginRight: "4px",
+  },
+  "& li:last-of-type": {
+    marginLeft: "4px",
+  },
+  "& .MuiPaginationItem-ellipsis": {
+    padding: 0,
+    margin: 0,
+  },
+  "& .MuiPaginationItem-previousNext": {
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+  },
+  "& .MuiPaginationItem-page": {
+    fontSize: "16px",
+    padding: "6px",
+    minWidth: "32px",
+    height: "32px",
+    borderRadius: "50%",
+  },
+  [theme.breakpoints.between("sm", "md")]: {
+    marginTop: "20px",
+    "& .MuiButtonBase-root": {
+      "& svg": {
+        fontSize: "44px",
+      },
+    },
+    "& li": {
+      margin: "0 4px",
+    },
+    "& li:first-of-type": {
+      marginRight: "8px",
+      marginLeft: 0,
+    },
+    "& li:last-of-type": {
+      marginLeft: "8px",
+      marginRight: 0,
+    },
+    "& .MuiPaginationItem-page": {
+      fontSize: "18px",
+      padding: "12px",
+      minWidth: "40px",
+      height: "40px",
+    },
+  },
+  [theme.breakpoints.up("md")]: {
+    marginTop: "26px",
+    "& .MuiButtonBase-root": {
+      "& svg": {
+        fontSize: "50px",
+      },
+    },
+    "& li": {
+      margin: "0 8px",
+    },
+    "& li:first-of-type": {
+      marginRight: "12px",
+      marginLeft: 0,
+    },
+    "& li:last-of-type": {
+      marginLeft: "12px",
+      marginRight: 0,
+    },
+    "& .MuiPaginationItem-page": {
+      fontSize: "20px",
+      minWidth: "44px",
+      height: "44px",
+    },
   },
 }));
