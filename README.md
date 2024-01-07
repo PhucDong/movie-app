@@ -35,8 +35,11 @@ Last update: **7 Jan 2024**
 
 - User Home Page: generate random content for the hero section
 - Detailed TV Show Info Page: add pagination in More Like This section
+- Add a TV Show to my list
 
 ## Next steps
 
-- Fetch data whenever a parameter changed (on going)
+- Fetch data whenever a parameter changed
+  - For Detailed Info Page (done)
+  - For Search Results Page (on going)
 - Implementing hamburger menu (on going)
