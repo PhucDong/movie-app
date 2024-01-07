@@ -12,8 +12,6 @@ export default function UserPageHeroSection({ heroSectionData }) {
     );
   }
 
-  // console.log(15, heroSectionData.genres);
-
   function formattedGenres() {
     let newGenres = [];
     heroSectionData.genres.forEach((genre) => {
