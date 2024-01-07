@@ -6,20 +6,24 @@ import apiService from "../app/apiService";
 import { API_KEY } from "../app/config";
 import styled from "@emotion/styled";
 import UnavailableSearchResult from "../components/SearchResultsPage/UnavailableSearchResult";
+import { CustomStylePagination } from "../components/UserHomePage/UserPageMovieCategory";
 
 export default function SearchResultsPage() {
-  const [genreTVShowsLocalData, setGenreTVShowsLocalData] = useState(
-    JSON.parse(localStorage.getItem("genreTVShows"))
-  );
-  const [searchResults, setSearchResults] = useState(() =>
-    genreTVShowsLocalData ? genreTVShowsLocalData : []
-  );
+  const [searchResults, setSearchResults] = useState([]);
   const [searchValue, setSearchValue] = useState(
     localStorage.getItem("searchValue")
+      ? localStorage.getItem("searchValue")
+      : ""
   );
   const [tVShowGenreTitle, setTVShowGenreTitle] = useState(
     localStorage.getItem("tVShowGenreTitle")
   );
+  const [tVShowGenreId, setTVShowGenreId] = useState(
+    localStorage.getItem("tVShowGenreId")
+  );
+
+  const [searchResultsPages, setSearchResultsPages] = useState(0);
+  const [searchResultsPageNumber, setSearchResultsPageNumber] = useState(1);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -28,27 +32,57 @@ export default function SearchResultsPage() {
     }
   };
 
-  useEffect(() => {
-    const fetchedSearchResultsData = async () => {
-      try {
-        await apiService
-          .get(
-            `/3/search/tv?query=${encodeURIComponent(
-              searchValue
-            )}&page=1&api_key=${API_KEY}`
-          )
-          .then((response) => setSearchResults([...response.data.results]));
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const handleChangeSearchResultsPagination = (event, newValue) => {
+    setSearchResultsPageNumber(newValue);
+  };
 
-    fetchedSearchResultsData();
-  }, [searchValue]);
+  useEffect(() => {
+    if (searchValue.length > 0) {
+      const fetchedSearchBarResultsData = async () => {
+        try {
+          await apiService
+            .get(
+              `/3/search/tv?query=${encodeURIComponent(
+                searchValue
+              )}&page=${searchResultsPageNumber}&api_key=${API_KEY}`
+            )
+            .then((response) => {
+              setSearchResultsPages(response.data.total_pages);
+              setSearchResults([...response.data.results]);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchedSearchBarResultsData();
+    }
+  }, [searchValue, searchResultsPageNumber]);
+
+  useEffect(() => {
+    if (tVShowGenreId) {
+      const fetchedTVShowResultsData = async () => {
+        try {
+          await apiService
+            .get(
+              `3/discover/tv?api_key=${API_KEY}&with_genres=${tVShowGenreId}&page=${searchResultsPageNumber}`
+            )
+            .then((response) => {
+              setSearchResultsPages(response.data.total_pages);
+              setSearchResults([...response.data.results]);
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchedTVShowResultsData();
+    }
+  }, [tVShowGenreId, searchResultsPageNumber]);
 
   return (
     <>
-      {genreTVShowsLocalData ? (
+      {JSON.parse(localStorage.getItem("genreTVShows")) ? (
         ""
       ) : (
         <UserPageSearchBar handleKeyDown={handleKeyDown} />
@@ -76,6 +110,15 @@ export default function SearchResultsPage() {
             <UnavailableSearchResult searchValue={searchValue} />
           )}
         </Box>
+        {searchResultsPages ? (
+          <CustomStylePagination
+            count={searchResultsPages > 500 ? 500 : searchResultsPages}
+            page={searchResultsPageNumber}
+            onChange={handleChangeSearchResultsPagination}
+          />
+        ) : (
+          ""
+        )}
       </CustomStyledSearchResultsContainer>
     </>
   );
