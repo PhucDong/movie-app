@@ -86,18 +86,19 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
     color: theme.palette.secondary.main,
   },
   "& h4": {
-    fontSize: "30px",
+    fontSize: "24px",
     fontWeight: 600,
   },
   "& .movie-release-date": {
     margin: "4px 0",
-    fontSize: "20px",
+    fontSize: "16px",
   },
   "& .movie-genres": {
-    fontSize: "20px",
+    fontSize: "16px",
   },
   "& .play-add-buttons": {
-    margin: "10px 0",
+    marginTop: "10px",
+    marginBottom: "16px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -106,12 +107,13 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
       border: "none",
       backgroundColor: theme.palette.secondary.main,
       borderRadius: 0,
-      padding: "14px 18px",
+      padding: "10px 14px",
       color: theme.palette.info.main,
       textTransform: "capitalize",
       width: "55%",
       "& .MuiTypography-root": {
         fontWeight: 600,
+        fontSize: "14px",
       },
     },
     "& .play-btn": {
@@ -121,16 +123,17 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
       lineHeight: "100%",
       padding: 0,
       "& svg": {
-        fontSize: "2rem",
+        fontSize: "1.8rem",
       },
     },
   },
   "& .movie-description": {
     lineHeight: 1.2,
+    fontSize: "14px",
   },
   [theme.breakpoints.up("sm")]: {
     "& h4": {
-      fontSize: "40px",
+      fontSize: "30px",
     },
     "& .movie-release-date": {
       margin: "8px 0",
@@ -139,9 +142,16 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
     "& .movie-genres": {
       fontSize: "22px",
     },
+    "& .movie-description": {
+      fontSize: "16px",
+    },
     "& .play-add-buttons": {
+      marginBottom: "18px",
       "& .MuiButton-root": {
         width: "36%",
+        "& .MuiTypography-root": {
+          fontSize: "16px",
+        },
       },
       "& .play-btn": {
         "& svg": {
@@ -180,12 +190,27 @@ const CustomStyledHeroSectionOfUserPage = styled(Box)(({ theme }) => ({
     },
   },
   [theme.breakpoints.up("lg")]: {
+    "& h4": {
+      fontSize: "40px",
+    },
+    "& .movie-release-date": {
+      margin: "8px 0",
+      fontSize: "32px",
+    },
+    "& .movie-genres": {
+      fontSize: "32px",
+    },
+
     "& .hero-section_container": {
       padding: "0 87px 40px 87px",
     },
     "& .hero-section_buttons-description": {
       "& .play-add-buttons": {
-        width: "40%",
+        width: "50%",
+      },
+      "& .movie-description": {
+        lineHeight: 1.25,
+        fontSize: "1.2rem",
       },
     },
   },
