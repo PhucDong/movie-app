@@ -22,7 +22,6 @@ export default function UserHomePage() {
       e.preventDefault();
       localStorage.setItem("searchValue", e.target.value);
       localStorage.removeItem("genreTVShows");
-      localStorage.removeItem("tVShowGenreTitle");
       navigate("/search");
     }
   };
