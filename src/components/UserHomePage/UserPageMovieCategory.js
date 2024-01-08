@@ -49,7 +49,7 @@ export default function UserPageMovieCategory(props) {
     } catch (error) {
       console.log(error);
     }
-
+    localStorage.removeItem("searchValue");
     navigate(
       categoryHeading === "Browse by Genres"
         ? `/search/tVShowGenre/${categoryItemId}`
@@ -86,31 +86,6 @@ export default function UserPageMovieCategory(props) {
     fetchedShowsData();
   }, [pageNumber, tVShowCategory.categoryId, tVShowCategory.heading]);
 
-  // useEffect(() => {
-  //   if (tVShowGenreId && tVShowId) {
-  //     const fetchedDataWithURLParameter = async () => {
-  //       try {
-  //         await apiService
-  //           .get(
-  //             tVShowCategory.heading === "Browse by Genres"
-  //               ? `3/discover/tv?api_key=${API_KEY}&with_genres=${tVShowGenreId}&page=1`
-  //               : `/3/tv/${tVShowId}?api_key=${API_KEY}&append_to_response=credits`
-  //           )
-  //           .then((response) =>
-  //             tVShowCategory.heading !== "Browse by Genres"
-  //               ? (setPages(response.data.total_pages),
-  //                 setShowsData([...response.data.results]))
-  //               : setShowsData([...response.data.genres])
-  //           );
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-
-  //     fetchedDataWithURLParameter();
-  //   }
-  // }, [tVShowId, tVShowGenreId, tVShowCategory.heading]);
-
   return (
     <CustomStyledMovieCategorySection
       headingTextColor={tVShowCategory.headingTextColor}
@@ -118,7 +93,7 @@ export default function UserPageMovieCategory(props) {
     >
       <Box className="movie-category_heading-section">
         <Typography variant="h4">{tVShowCategory.heading}</Typography>
-        <ArrowForwardIosRoundedIcon />
+        {/* <ArrowForwardIosRoundedIcon /> */}
       </Box>
       <Tabs
         value={value}
@@ -221,14 +196,8 @@ export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
     padding: 0,
     margin: 0,
     "& svg": {
-      fontSize: "24px",
+      fontSize: "20px",
     },
-  },
-  "& li:first-of-type": {
-    marginRight: "4px",
-  },
-  "& li:last-of-type": {
-    marginLeft: "4px",
   },
   "& .MuiPaginationItem-ellipsis": {
     padding: 0,
@@ -241,17 +210,17 @@ export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
     height: "100%",
   },
   "& .MuiPaginationItem-page": {
-    fontSize: "16px",
+    fontSize: "14px",
     padding: "6px",
-    minWidth: "32px",
-    height: "32px",
+    minWidth: "28px",
+    height: "28px",
     borderRadius: "50%",
   },
   [theme.breakpoints.between("sm", "md")]: {
     marginTop: "20px",
     "& .MuiButtonBase-root": {
       "& svg": {
-        fontSize: "44px",
+        fontSize: "30px",
       },
     },
     "& li": {
@@ -266,7 +235,7 @@ export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
       marginRight: 0,
     },
     "& .MuiPaginationItem-page": {
-      fontSize: "18px",
+      fontSize: "16px",
       padding: "12px",
       minWidth: "40px",
       height: "40px",
@@ -276,22 +245,20 @@ export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
     marginTop: "26px",
     "& .MuiButtonBase-root": {
       "& svg": {
-        fontSize: "50px",
+        fontSize: "40px",
       },
     },
     "& li": {
       margin: "0 8px",
     },
     "& li:first-of-type": {
-      marginRight: "12px",
       marginLeft: 0,
     },
     "& li:last-of-type": {
-      marginLeft: "12px",
       marginRight: 0,
     },
     "& .MuiPaginationItem-page": {
-      fontSize: "20px",
+      fontSize: "18px",
       minWidth: "44px",
       height: "44px",
     },
