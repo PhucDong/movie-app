@@ -11,7 +11,7 @@ import { CustomStylePagination } from "../components/UserHomePage/UserPageMovieC
 export default function SearchResultsPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchValue, setSearchValue] = useState(
-    localStorage.getItem("searchValue").length > 0
+    localStorage.getItem("searchValue")
       ? localStorage.getItem("searchValue")
       : ""
   );
@@ -58,7 +58,7 @@ export default function SearchResultsPage() {
       fetchedSearchBarResultsData();
     } else {
       setSearchResultsPages(0);
-      setSearchResults([]);
+      setSearchResults(JSON.parse(localStorage.getItem("genreTVShows")));
     }
   }, [searchValue, searchResultsPageNumber]);
 
@@ -101,6 +101,7 @@ export default function SearchResultsPage() {
                   ? `${tVShowGenreTitle} Shows`
                   : "Search Results"}
               </Typography>
+
               <CustomStyledSearchResultCards>
                 {searchResults.map((searchResult, index) => (
                   <SearchResultCard
