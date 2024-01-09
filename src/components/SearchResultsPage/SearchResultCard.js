@@ -22,7 +22,7 @@ export default function SearchResultCard({ searchResult }) {
       console.log(error);
     }
 
-    navigate(`/browse/tVShow/${searchResultId}`);
+    navigate(`/browse/tVShows/${searchResultId}`);
   };
 
   return (
