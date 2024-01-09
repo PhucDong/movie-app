@@ -13,7 +13,8 @@ import apiService from "../../app/apiService";
 import { API_KEY, BG_IMAGE_URL } from "../../app/config";
 import { useNavigate } from "react-router-dom";
 
-export default function SimilarTVShowsSection({ similarTVShowsData }) {
+export default function SimilarTVShowsSection(props) {
+  const { similarTVShowsData, setTVShowDetailsLocalData } = props;
   const [similarTVShows, setSimilarTVShows] = useState([]);
   const navigate = useNavigate();
 
@@ -28,14 +29,16 @@ export default function SimilarTVShowsSection({ similarTVShowsData }) {
         .get(
           `/3/tv/${similarTVShowId}?api_key=${API_KEY}&append_to_response=credits`
         )
-        .then((response) =>
-          localStorage.setItem("tVShowDetails", JSON.stringify(response.data))
-        );
+        .then((response) => {
+          localStorage.setItem("tVShowDetails", JSON.stringify(response.data));
+          setTVShowDetailsLocalData(JSON.parse(JSON.stringify(response.data)));
+        });
     } catch (error) {
       console.log(error);
     }
-    
-    navigate(`/browse/tVShow/${similarTVShowId}`);
+
+    navigate(`/browse/tVShows/${similarTVShowId}`);
+    // window.location.reload(true);
   };
 
   useEffect(() => {
