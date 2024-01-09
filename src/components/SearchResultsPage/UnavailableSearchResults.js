@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Box, List, ListItem, Typography } from "@mui/material";
 
-export default function UnavailableSearchResult({ searchValue }) {
+export default function UnavailableSearchResults({ searchValue }) {
   return (
     <CustomStyledNoSearchResultContainer>
       <Typography className="no-search-result_heading">
