@@ -47,7 +47,19 @@ export default function NavBar() {
   };
 
   const handleSignOut = () => {
-    localStorage.clear();
+    const localDataToRemove = [
+      "email",
+      "password",
+      "isValidUser",
+      "searchValue",
+      "totalPages",
+      "genreTVShows",
+      "tVShowDetails",
+      "tVShowGenreTitle",
+      "tVShowGenreId",
+    ];
+
+    localDataToRemove.forEach((data) => localStorage.removeItem(data));
     setDropdownProfileMenu(null);
     navigate("/", { replace: true });
   };
