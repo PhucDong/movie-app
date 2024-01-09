@@ -15,7 +15,10 @@ import styled from "@emotion/styled";
 import apiService from "../../app/apiService";
 import { API_KEY, BG_IMAGE_URL } from "../../app/config";
 
-export default function TVShowSeasonSection({ tVShowSeasonsData }) {
+export default function TVShowSeasonSection({
+  tVShowSeasonsData,
+  tVShowIdParam,
+}) {
   const [dropdownSeasonMenu, setDropdownSeasonMenu] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const openSeasonMenu = Boolean(dropdownSeasonMenu);
@@ -61,7 +64,7 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
         try {
           await apiService
             .get(
-              `3/tv/${tVShowSeasonsData.id}/season/${seasonNumber}?api_key=${API_KEY}`
+              `3/tv/${tVShowIdParam}/season/${seasonNumber}?api_key=${API_KEY}`
             )
             .then((response) => setSeasonEpisodes([...response.data.episodes]));
         } catch (error) {
@@ -71,7 +74,7 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
 
       fetchedSeasonEpisodes();
     }
-  }, [seasonNumber, tVShowSeasonsData.id]);
+  }, [seasonNumber, tVShowIdParam]);
 
   return (
     <CustomStyledSeasonSection>
@@ -120,7 +123,7 @@ export default function TVShowSeasonSection({ tVShowSeasonsData }) {
                   {episode.runtime ? `${episode.runtime}m` : "Coming Soon"}
                 </Typography>
                 <Typography className="episode-description">
-                  {`${episode.overview.slice(0, 200)}...`}
+                  {`${episode.overview.slice(0, 86)}...`}
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -184,21 +187,22 @@ const CustomStyledEpisodeCards = styled(Box)(() => ({
 const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
   borderRadius: "12px",
   boxShadow: "none",
-  minHeight: "160px",
+  height: "156px",
   "& .MuiCardActionArea-root": {
     width: "100%",
-    minHeight: "160px",
+    height: "100%",
     display: "flex",
     alignItems: "stretch",
     "& img": {
       width: "40%",
-      height: "auto",
+      height: "156px",
     },
     "& .MuiCardContent-root": {
       width: "100%",
-      padding: "10px",
+      height: "100%",
+      padding: "8px",
       "& .MuiTypography-root": {
-        fontSize: "14px",
+        fontSize: "13px",
       },
       "& .episode-title": {
         fontWeight: "bold",
@@ -214,9 +218,11 @@ const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
     },
   },
   [theme.breakpoints.between("sm", "md")]: {
+    height: "164px",
     "& .MuiCardActionArea-root": {
       "& img": {
-        width: "35%",
+        width: "34%",
+        height: "164px",
       },
       "& .MuiCardContent-root": {
         padding: "14px",
@@ -230,33 +236,37 @@ const CustomStyledEpisodeCard = styled(Card)(({ theme }) => ({
     },
   },
   [theme.breakpoints.between("md", "lg")]: {
+    height: "164px",
     "& .MuiCardActionArea-root": {
       "& img": {
-        width: "30%",
+        width: "32%",
+        height: "164px",
       },
       "& .MuiCardContent-root": {
         padding: "16px",
         "& .MuiTypography-root": {
-          fontSize: "18px",
+          fontSize: "16px",
         },
         "& .episode-title": {
-          fontSize: "20px",
+          fontSize: "18px",
         },
       },
     },
   },
   [theme.breakpoints.up("lg")]: {
+    height: "170px",
     "& .MuiCardActionArea-root": {
       "& img": {
-        width: "25%",
+        width: "26%",
+        height: "170px",
       },
       "& .MuiCardContent-root": {
         padding: "18px",
         "& .MuiTypography-root": {
-          fontSize: "20px",
+          fontSize: "18px",
         },
         "& .episode-title": {
-          fontSize: "22px",
+          fontSize: "20px",
         },
       },
     },
