@@ -1,20 +1,20 @@
-import { Box, Card, Pagination, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Card, Tab, Tabs, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { useNavigate, useParams } from "react-router-dom";
+// import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import { useNavigate } from "react-router-dom";
 import TVShowCard from "./TVShowCard";
 import apiService from "../../app/apiService";
 import { API_KEY } from "../../app/config";
+import CustomPagination from "../SearchResultsPage/CustomPagination";
 
 export default function UserPageMovieCategory(props) {
   const { tVShowCategory, tVShowCategoryId } = props;
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pages, setPages] = useState(0);
+  const [tVShowCategoryPageNumber, setTVShowCategoryPageNumber] = useState(1);
+  const [tVShowCategoryPages, setTVShowCategoryPages] = useState(0);
   const [showsData, setShowsData] = useState([]);
-  // const { tVShowId, tVShowGenreId } = useParams();
 
   const handleChangeTab = (event, newValue) => {
     setValue(newValue);
@@ -40,7 +40,8 @@ export default function UserPageMovieCategory(props) {
                 JSON.stringify(response.data.results)
               ),
               localStorage.setItem("tVShowGenreTitle", tVShowGenreTitle),
-              localStorage.setItem("tVShowGenreId", categoryItemId))
+              localStorage.setItem("tVShowGenreId", categoryItemId),
+              localStorage.setItem("totalPages", response.data.total_pages))
             : localStorage.setItem(
                 "tVShowDetails",
                 JSON.stringify(response.data)
@@ -49,16 +50,15 @@ export default function UserPageMovieCategory(props) {
     } catch (error) {
       console.log(error);
     }
-    localStorage.removeItem("searchValue");
     navigate(
       categoryHeading === "Browse by Genres"
-        ? `/search/tVShowGenre/${categoryItemId}`
-        : `/browse/tVShow/${categoryItemId}`
+        ? `/search/tVShowGenres/${categoryItemId}`
+        : `/browse/tVShows/${categoryItemId}`
     );
   };
 
-  const handleChangePagination = (event, newValue) => {
-    setPageNumber(newValue);
+  const handleChangeTVShowCategoryPagination = (event, newValue) => {
+    setTVShowCategoryPageNumber(newValue);
   };
 
   useEffect(() => {
@@ -69,12 +69,12 @@ export default function UserPageMovieCategory(props) {
             tVShowCategory.heading === "Browse by Genres"
               ? `/3/genre/tv/list?api_key=${API_KEY}`
               : tVShowCategory.heading === "Top TV Shows"
-              ? `/3/tv/top_rated?api_key=${API_KEY}&language=en-US&page=${pageNumber}`
-              : `/3/discover/tv?api_key=${API_KEY}&with_genres=${tVShowCategory.categoryId}&page=${pageNumber}`
+              ? `/3/tv/top_rated?api_key=${API_KEY}&language=en-US&page=${tVShowCategoryPageNumber}`
+              : `/3/discover/tv?api_key=${API_KEY}&with_genres=${tVShowCategoryId}&page=${tVShowCategoryPageNumber}`
           )
           .then((response) =>
             tVShowCategory.heading !== "Browse by Genres"
-              ? (setPages(response.data.total_pages),
+              ? (setTVShowCategoryPages(response.data.total_pages),
                 setShowsData([...response.data.results]))
               : setShowsData([...response.data.genres])
           );
@@ -84,7 +84,7 @@ export default function UserPageMovieCategory(props) {
     };
 
     fetchedShowsData();
-  }, [pageNumber, tVShowCategory.categoryId, tVShowCategory.heading]);
+  }, [tVShowCategoryPageNumber, tVShowCategoryId, tVShowCategory.heading]);
 
   return (
     <CustomStyledMovieCategorySection
@@ -119,10 +119,10 @@ export default function UserPageMovieCategory(props) {
       </Tabs>
 
       {tVShowCategory.heading !== "Browse by Genres" ? (
-        <CustomStylePagination
-          count={pages > 500 ? 500 : pages}
-          page={pageNumber}
-          onChange={handleChangePagination}
+        <CustomPagination
+          resultPages={tVShowCategoryPages}
+          resultPageNumber={tVShowCategoryPageNumber}
+          setSearchBarResultsPages={handleChangeTVShowCategoryPagination}
         />
       ) : (
         ""
@@ -186,81 +186,81 @@ const CustomStyledMovieCategorySection = styled(Box, {
   },
 }));
 
-export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
-  width: "100%",
-  marginTop: "14px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  "& .MuiButtonBase-root": {
-    padding: 0,
-    margin: 0,
-    "& svg": {
-      fontSize: "20px",
-    },
-  },
-  "& .MuiPaginationItem-ellipsis": {
-    padding: 0,
-    margin: 0,
-  },
-  "& .MuiPaginationItem-previousNext": {
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-  },
-  "& .MuiPaginationItem-page": {
-    fontSize: "14px",
-    padding: "6px",
-    minWidth: "28px",
-    height: "28px",
-    borderRadius: "50%",
-  },
-  [theme.breakpoints.between("sm", "md")]: {
-    marginTop: "20px",
-    "& .MuiButtonBase-root": {
-      "& svg": {
-        fontSize: "30px",
-      },
-    },
-    "& li": {
-      margin: "0 4px",
-    },
-    "& li:first-of-type": {
-      marginRight: "8px",
-      marginLeft: 0,
-    },
-    "& li:last-of-type": {
-      marginLeft: "8px",
-      marginRight: 0,
-    },
-    "& .MuiPaginationItem-page": {
-      fontSize: "16px",
-      padding: "12px",
-      minWidth: "40px",
-      height: "40px",
-    },
-  },
-  [theme.breakpoints.up("md")]: {
-    marginTop: "26px",
-    "& .MuiButtonBase-root": {
-      "& svg": {
-        fontSize: "40px",
-      },
-    },
-    "& li": {
-      margin: "0 8px",
-    },
-    "& li:first-of-type": {
-      marginLeft: 0,
-    },
-    "& li:last-of-type": {
-      marginRight: 0,
-    },
-    "& .MuiPaginationItem-page": {
-      fontSize: "18px",
-      minWidth: "44px",
-      height: "44px",
-    },
-  },
-}));
+// export const CustomStylePagination = styled(Pagination)(({ theme }) => ({
+//   width: "100%",
+//   marginTop: "14px",
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+//   "& .MuiButtonBase-root": {
+//     padding: 0,
+//     margin: 0,
+//     "& svg": {
+//       fontSize: "20px",
+//     },
+//   },
+//   "& .MuiPaginationItem-ellipsis": {
+//     padding: 0,
+//     margin: 0,
+//   },
+//   "& .MuiPaginationItem-previousNext": {
+//     display: "flex",
+//     alignItems: "center",
+//     width: "100%",
+//     height: "100%",
+//   },
+//   "& .MuiPaginationItem-page": {
+//     fontSize: "14px",
+//     padding: "6px",
+//     minWidth: "28px",
+//     height: "28px",
+//     borderRadius: "50%",
+//   },
+//   [theme.breakpoints.between("sm", "md")]: {
+//     marginTop: "20px",
+//     "& .MuiButtonBase-root": {
+//       "& svg": {
+//         fontSize: "30px",
+//       },
+//     },
+//     "& li": {
+//       margin: "0 4px",
+//     },
+//     "& li:first-of-type": {
+//       marginRight: "8px",
+//       marginLeft: 0,
+//     },
+//     "& li:last-of-type": {
+//       marginLeft: "8px",
+//       marginRight: 0,
+//     },
+//     "& .MuiPaginationItem-page": {
+//       fontSize: "16px",
+//       padding: "12px",
+//       minWidth: "40px",
+//       height: "40px",
+//     },
+//   },
+//   [theme.breakpoints.up("md")]: {
+//     marginTop: "26px",
+//     "& .MuiButtonBase-root": {
+//       "& svg": {
+//         fontSize: "40px",
+//       },
+//     },
+//     "& li": {
+//       margin: "0 8px",
+//     },
+//     "& li:first-of-type": {
+//       marginLeft: 0,
+//     },
+//     "& li:last-of-type": {
+//       marginRight: 0,
+//     },
+//     "& .MuiPaginationItem-page": {
+//       fontSize: "18px",
+//       minWidth: "44px",
+//       height: "44px",
+//     },
+//   },
+// }));
