@@ -8,19 +8,21 @@ export default function CastAndCrewSection({ castAndCrewData }) {
       <CustomStyledCastContent>
         <Typography variant="h4">Cast & Crew</Typography>
         <CustomCastAndCrewCards>
-          {castAndCrewData.map((cast, index) => (
-            <CustomCastAndCrewCard key={index}>
-              <Avatar
-                variant="circular"
-                src={`${BG_IMAGE_URL}${cast.profile_path}`}
-                alt={cast.original_name}
-              />
-              <Box className="cast-info">
-                <Typography variant="h6">{cast.original_name}</Typography>
-                <Typography>{cast.character}</Typography>
-              </Box>
-            </CustomCastAndCrewCard>
-          ))}
+          {castAndCrewData.length > 0
+            ? castAndCrewData.map((cast, index) => (
+                <CustomCastAndCrewCard key={index}>
+                  <Avatar
+                    variant="circular"
+                    src={`${BG_IMAGE_URL}${cast.profile_path}`}
+                    alt={cast.original_name}
+                  />
+                  <Box className="cast-info">
+                    <Typography variant="h6">{cast.original_name}</Typography>
+                    <Typography>{cast.character}</Typography>
+                  </Box>
+                </CustomCastAndCrewCard>
+              ))
+            : ""}
         </CustomCastAndCrewCards>
       </CustomStyledCastContent>
     </CustomStyledCastSection>
