@@ -13,15 +13,14 @@ export default function DetailedInfoPage() {
   const [tVShowDetailsLocalData, setTVShowDetailsLocalData] = useState(
     JSON.parse(localStorage.getItem("tVShowDetails"))
   );
-
-  const { tVShowId } = useParams();
+  const { tVShowIdParam } = useParams();
 
   useEffect(() => {
     const fetchedTVShowDetailsWithParameter = async () => {
       try {
         await apiService
           .get(
-            `/3/tv/${tVShowId}?api_key=${API_KEY}&append_to_response=credits`
+            `/3/tv/${tVShowIdParam}?api_key=${API_KEY}&append_to_response=credits`
           )
           .then((response) => {
             localStorage.setItem(
@@ -38,17 +37,23 @@ export default function DetailedInfoPage() {
     };
 
     fetchedTVShowDetailsWithParameter();
-  }, [tVShowId]);
+  }, [tVShowIdParam]);
 
   return (
     <>
       <UserPageHeroSection heroSectionData={tVShowDetailsLocalData} />
       <CustomStyledDetailedTVShowOtherInfo>
-        <TVShowSeasonSection tVShowSeasonsData={tVShowDetailsLocalData} />
+        <TVShowSeasonSection
+          tVShowIdParam={tVShowIdParam}
+          tVShowSeasonsData={tVShowDetailsLocalData}
+        />
         <CastAndCrewSection
           castAndCrewData={tVShowDetailsLocalData.credits.cast}
         />
-        <SimilarTVShowsSection similarTVShowsData={tVShowDetailsLocalData} />
+        <SimilarTVShowsSection
+          similarTVShowsData={tVShowDetailsLocalData}
+          setTVShowDetailsLocalData={setTVShowDetailsLocalData}
+        />
       </CustomStyledDetailedTVShowOtherInfo>
     </>
   );
