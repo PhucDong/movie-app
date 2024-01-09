@@ -2,29 +2,14 @@ import { Box } from "@mui/material";
 import UserPageHeroSection from "../components/UserHomePage/UserPageHeroSection";
 import UserPageSearchBar from "../components/UserHomePage/UserPageSearchBar";
 import UserPageMovieCategory from "../components/UserHomePage/UserPageMovieCategory";
-import { useEffect, useState } from "react";
-import apiService from "../app/apiService";
-import { API_KEY } from "../app/config";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function UserHomePage() {
-  const [heroSectionData, setHeroSectionData] = useState({
-    backdrop_path: "",
-    original_name: "",
-    first_air_date: "",
-    genres: [],
-    overview: "",
-  });
-  const navigate = useNavigate();
+  const [heroSectionData, setHeroSectionData] = useState(
+    JSON.parse(localStorage.getItem("heroSectionData"))
+  );
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      localStorage.setItem("searchValue", e.target.value);
-      localStorage.removeItem("genreTVShows");
-      navigate("/search");
-    }
-  };
+  console.log(12, heroSectionData);
 
   const movieCategoryData = [
     {
@@ -81,25 +66,10 @@ export default function UserHomePage() {
     },
   ];
 
-  // Get hero section data
-  useEffect(() => {
-    const fetchedHeroSectionData = async () => {
-      try {
-        await apiService
-          .get(`/3/tv/400?api_key=${API_KEY}`)
-          .then((response) => setHeroSectionData({ ...response.data }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchedHeroSectionData();
-  }, []);
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <UserPageHeroSection heroSectionData={heroSectionData} />
-      <UserPageSearchBar handleKeyDown={handleKeyDown} />
+      <UserPageSearchBar />
       {movieCategoryData.map((tVShowCategory, index) => (
         <UserPageMovieCategory
           key={index}
