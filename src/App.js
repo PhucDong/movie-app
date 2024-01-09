@@ -7,9 +7,11 @@ import {
 import RootLayout from "./layouts/RootLayout";
 import GuestHomePage from "./pages/GuestHomePage";
 import UserHomePage from "./pages/UserHomePage";
-import SearchResultsPage from "./pages/SearchResultsPage";
 import DetailedTVShowInfoPage from "./pages/DetailedTVShowInfoPage";
 import ScrollToTopLayout from "./layouts/ScrollToTopLayout";
+import SearchResultsPageLayout from "./layouts/SearchResultsPageLayout";
+import SearchBarResultsPage from "./pages/SearchBarResultsPage";
+import TVShowGenreResultsPage from "./pages/TVShowGenreResultsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,9 +19,18 @@ const router = createBrowserRouter(
       <Route path="/" element={<RootLayout />}>
         <Route index element={<GuestHomePage />} />
         <Route path="browse" element={<UserHomePage />} />
-        <Route path="browse/tVShow/:tVShowId" element={<DetailedTVShowInfoPage />} />
-        <Route path="search" element={<SearchResultsPage />} />
-        <Route path="search/tVShowGenre/:tVShowGenreId" element={<SearchResultsPage />} />
+        <Route
+          path="browse/tVShows/:tVShowIdParam"
+          element={<DetailedTVShowInfoPage />}
+        />
+
+        <Route path="search" element={<SearchResultsPageLayout />}>
+          <Route path="tVShows" element={<SearchBarResultsPage />} />
+          <Route
+            path="tVShowGenres/:tVShowGenreIdParam"
+            element={<TVShowGenreResultsPage />}
+          />
+        </Route>
         <Route path="detailed" element={<DetailedTVShowInfoPage />} />
       </Route>
     </Route>
