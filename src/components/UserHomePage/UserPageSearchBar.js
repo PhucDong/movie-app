@@ -2,13 +2,48 @@ import { Box, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import apiService from "../../app/apiService";
+import { API_KEY } from "../../app/config";
 
-export default function UserPageSearchBar({ handleKeyDown }) {
+export default function UserPageSearchBar(props) {
+  const { setSearchValue, setSearchResults, setSearchBarResultsPages } = props;
+
   const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     localStorage.setItem("searchValue", e.target.value);
     setInputValue(e.target.value);
+  };
+
+  const handleKeyDown = async (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      try {
+        await apiService
+          .get(
+            `/3/search/tv?query=${encodeURIComponent(
+              inputValue
+            )}&page=1&api_key=${API_KEY}`
+          )
+          .then((response) => {
+            localStorage.setItem("totalPages", response.data.total_pages);
+            localStorage.setItem(
+              "genreTVShows",
+              JSON.stringify(response.data.results)
+            );
+            localStorage.setItem("searchValue", inputValue);
+            setSearchResults(response.data.results);
+            setSearchValue(inputValue);
+            setSearchBarResultsPages(Number(response.data.total_pages));
+          });
+      } catch (error) {
+        console.log(error);
+      }
+
+      navigate("/search/tVShows", { replace: true });
+    }
   };
 
   return (
