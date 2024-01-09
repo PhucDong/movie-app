@@ -4,6 +4,9 @@ import * as yup from "yup";
 import { Dialog, DialogTitle, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import apiService from "../../app/apiService";
+import { API_KEY } from "../../app/config";
+import { useEffect } from "react";
 
 const getCharacterValidationError = (str) => {
   return `Your password must have at least 1 ${str} character`;
@@ -38,10 +41,10 @@ export default function LogInForm(props) {
     resolver: yupResolver(schema),
   });
 
-  // console.log(41, watch());
+  // console.log(44, watch());
 
   const onSubmit = (data) => {
-    // console.log(44, data);
+    // console.log(47, data);
     localStorage.setItem("email", data.email);
     localStorage.setItem("password", data.password);
 
@@ -55,6 +58,25 @@ export default function LogInForm(props) {
     localStorage.clear();
     onCloseLogInForm();
   };
+
+  useEffect(() => {
+    const fetchedHeroSectionData = async () => {
+      try {
+        await apiService
+          .get(`/3/tv/400?api_key=${API_KEY}`)
+          .then((response) =>
+            localStorage.setItem(
+              "heroSectionData",
+              JSON.stringify(response.data)
+            )
+          );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchedHeroSectionData();
+  }, []);
 
   return (
     <CustomStyledLogInForm onClose={handleClose} open={openLogInForm}>
