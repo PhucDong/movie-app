@@ -1,45 +1,34 @@
 # Movie App
 
-Last update: **7 Jan 2024**
+Last update: **18 Jan 2024**
 
-## Pages
+## Description
 
-### Log in credentials
+Movie App is a website that allows users to search for TV shows by keywords, see genre-relevant shows, read detailed information of each show, and access to similar shows. The website uses ReactJS, Material UI, React router, React hook form, and Yup.
 
-- email: "phuc@gmail.com",
-- password: "helloWORLD@1014",
+## How to install & run the app
 
-### User Home Page
+- Step 1: cloning this repo with `git clone https://github.com/PhucDong/movie-app`
+- Step 2: installing the following dependencies
+  - `npm install`
+  - `npm i react-router-dom`
+  - `npm install @mui/material @emotion/react @emotion/styled @mui/icons-material`
+  - `npm install react-hook-form`
+  - `npm i yup`
+  - `npm i mui-image`
+  - `npm install axios`
+- Step 3: `npm start` to start running the app
 
-- Hero section:
-  - Play: play the 1st episode of the 1st season
-  - Add to my list: add the movie to your favorite list
-- Search bar: search for movies, genres
-- Different sections for distinct movie categories. Each category contains multiple movies.
+## How to use the app
 
-### Search Results Page
+Using the below information for login credentials
 
-- Displays search results
-- Allows users to search for other movies
-
-### Detailed Info Page
-
-- Shows detailed information of each movie that includes seasons, episodes, cast & crew, similar movies, etc
-
-### Movie Genre Page
-
-- Displays movies that are in the same genre after selecting a genre in the **User Home Page**
-- Lets users search for other movies as well
+- Email: "phuc@gmail.com",
+- Password: "helloWORLD@1014",
 
 ## Future features
 
-- User Home Page: generate random content for the hero section
-- Detailed TV Show Info Page: add pagination in More Like This section
-- Add a TV Show to my list
-
-## Next steps
-
-- Fetch data whenever a parameter changed
-  - For Detailed Info Page (done)
-  - For Search Results Page (on going)
-- Implementing hamburger menu (on going)
+- Generating random content for the hero section in User Home Page
+- Users can add their favorite TV Shows to their list
+- Fetching data whenever a parameter changed for Search Results Page
+- Implementing hamburger menu
