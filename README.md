@@ -28,7 +28,9 @@ Using the below information for login credentials
 
 ## Future features
 
-- Generating random content for the hero section in User Home Page
+- Generating random content for the hero section in the User Home Page
 - Users can add their favorite TV Shows to their list
-- Fetching data whenever a parameter changed for Search Results Page
-- Implementing hamburger menu
+- Fetching data whenever a parameter changed for the Search Results Page
+- Implementing the hamburger menu on smartphones
+- Updating this README file with Figma's link
+- Fixing errors: the Detailed Info Page is not updated completely whenever a Similar Show is clicked on
